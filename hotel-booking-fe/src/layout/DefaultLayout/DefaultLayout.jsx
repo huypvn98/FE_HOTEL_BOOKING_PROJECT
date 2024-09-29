@@ -3,16 +3,21 @@ import React from "react";
 import { useNavigate } from "react-router";
 import "./DefaultLayout.css"
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 const { Content } = Layout;
 const { Item } = Menu;
 
 const DefaultLayout = ({ children }) => {
+  const navigate = useNavigate()
   return (
     <Layout>
       <header className="header">
-      <Menu className="header-menu w-[1010px], h-[47px]" mode="horizontal">
+    <div className="flex w-[400px]">
+      <Menu className="header-menu w-[518px], h-[47px]" mode="horizontal">
       <Item key="home">
+      <Link to="/">
         Home
+        </Link>
       </Item>
       <Item key="about">
         About Us
@@ -26,9 +31,10 @@ const DefaultLayout = ({ children }) => {
     </Menu>
     <div className="header-function ml-[167px] flex">
         <Select className="w-[80px] h-[47px]" placeholder="Eng"></Select>
-        <Button className="login-button w-[77px] h-[47px]" style={{backgroundColor:"rgba(255, 255, 255, 0.2)", border:"0px", boxShadow:"none", }}>Login</Button>
-        <Button className="signup-button w-[168px] h-[47px]" style={{backgroundColor:"#A9B489",borderRadius:"50px", boxShadow:"none", color:"white", }}>Sign Up</Button>
+        <Button className="login-button w-[77px] h-[47px]" style={{backgroundColor:"transparent", border:"0px", boxShadow:"none", }} onClick={()=>{navigate('/login')}}>Login</Button>
+        <Button className="signup-button w-[168px] h-[47px]" style={{backgroundColor:"#A9B489",borderRadius:"50px", boxShadow:"none", color:"white", }} onClick={()=>{navigate('/signup')}}>Sign Up</Button>
     </div>
+</div>
       </header>
       <Content
         style={{

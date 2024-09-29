@@ -1,18 +1,24 @@
 .header{
-    height: 150px;
+    height: 116px;
     background-color: rgba(255, 255, 255, 0.2);
     justify-content: center;
     display: flex;
     align-items: center;
-    
+    position: absolute; 
+    z-index: 100;
+    width: 100%;
 }
 .header-menu{
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+
+}
+:where(.css-dev-only-do-not-override-14qglws).ant-menu .ant-menu-title-content{
+    color: #ddd;
 }
 :where(.css-dev-only-do-not-override-14qglws).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector{
     border: 0px;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white !important;
+    background-color: transparent;
+    color: #ddd !important;
     overflow: visible;
 }
 .footer{
