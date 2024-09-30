@@ -1,0 +1,27 @@
+.bgImage {
+  background-image: url("/src/image/backgroundImage.jpg");
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login_form {
+  width: 512px;
+  height: 696px;
+  padding: 100px 60px 0 60px;
+  border-radius: 40px;
+  background-color: white;
+  z-index: 2;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: #33333399; /* Adjust the opacity as needed */
+  z-index: 1;
+}
