@@ -39,9 +39,9 @@ function Home() {
                   backgroundColor: "#EFEFEF",
                   borderColor: "#EFEFEF",
                 }}
-              >
-                <LeftOutlined />
-              </Button>
+                icon={<LeftOutlined style={{ color: "black" }} />}
+                hoverable={false}
+              />
               <Button
                 shape="round"
                 style={{
@@ -51,6 +51,7 @@ function Home() {
                   borderColor: "#A9B489",
                 }}
                 icon={<RightOutlined style={{ color: "white" }} />}
+                hoverable={false}
               />
             </div>
           </div>
@@ -139,6 +140,7 @@ function Home() {
               <Button
                 className="rounded-[50px] w-[212px] h-[47px] text-white"
                 style={{ backgroundColor: "#A9B489" }}
+                hoverable={false}
               >
                 Contact Us
               </Button>
@@ -148,18 +150,22 @@ function Home() {
       </div>
 
       {/* Most picket */}
-      <div className="mx-[250px] grid grid-cols-4 gap-[29px] mt-[120px]">
-        {[...Array(8)].map((_, index) => (
-          <div key={index} className="flex flex-col">
-            <img className="w-[263px] h-[180px] rounded-[15px]" src={hotel} />
-            <div className="mt-[20px]">
-              <p className="font-sans">GRAND SAIGON</p>
-              <p className="font-sans text-[#B0B0B0]">HCM city</p>
+      <div className="mx-[250px] mt-[120px]">
+        <p className="font-sans font-extrabold text-2xl leading-[43.58px] items-center">
+          Most picked
+        </p>
+        <div className=" grid grid-cols-4 gap-[29px] mt-[60px]">
+          {[...Array(8)].map((_, index) => (
+            <div key={index} className="flex flex-col">
+              <img className="w-[263px] h-[180px] rounded-[15px]" src={hotel} />
+              <div className="mt-[20px]">
+                <p className="font-sans">GRAND SAIGON</p>
+                <p className="font-sans text-[#B0B0B0]">HCM city</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-
       {/* customer comment */}
       <div className="mx-[250px] mt-[120px]">
         <div className="flex flex-row justify-between">
@@ -175,9 +181,9 @@ function Home() {
                 backgroundColor: "#EFEFEF",
                 borderColor: "#EFEFEF",
               }}
-            >
-              <LeftOutlined />
-            </Button>
+              icon={<LeftOutlined style={{ color: "black" }} />}
+              hoverable={false}
+            />
             <Button
               shape="round"
               style={{
@@ -187,6 +193,7 @@ function Home() {
                 borderColor: "#A9B489",
               }}
               icon={<RightOutlined style={{ color: "white" }} />}
+              hoverable={false}
             />
           </div>
         </div>
