@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Image } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import hotel from "../../assets/caption.jpg";
-import hotlady from "../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
-import profile from "../../assets/Ellipse 4.png";
+import hotel from "../../../assets/caption.jpg";
+import hotlady from "../../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
+// import profile from "../../assets/Ellipse 4.png";
 
 function Home() {
   function ImageCard({ src, alt, className }) {

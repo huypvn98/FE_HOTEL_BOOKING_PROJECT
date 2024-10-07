@@ -1,53 +1,38 @@
-import React from "react";
-import "./SignUp.css";
-import { Button, Checkbox, Form, Input } from "antd";
 import {
   GoogleOutlined,
   LockOutlined,
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input } from "antd";
+import React from "react";
+import "./Login.css";
 import { Link } from "react-router-dom";
-import googleIcon from "../../image/googleIcon.png";
+import googleIcon from "../../../image/googleIcon.png";
 
-const SignUp = () => {
+const Login = () => {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
-
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <div className="bgImage">
       <div className="overlay"></div>
-      <div className="signup_form">
+      <div className="login_form">
         <h2
           style={{ textAlign: "center", fontSize: "30px", fontWeight: "bold" }}
         >
-          Create Account
+          Log In
         </h2>
         <Form
-          name="signup_form"
+          name="login_form"
           initialValues={{ remember: true }}
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           layout="vertical"
         >
-          {/* Name Field */}
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[
-              {
-                required: true,
-                message: "Please enter your name!",
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              prefix={<UserOutlined />}
-              placeholder="Enter your name"
-            />
-          </Form.Item>
-
           {/* Email Field */}
           <Form.Item
             name="email"
@@ -81,19 +66,10 @@ const SignUp = () => {
           </Form.Item>
 
           {/* Terms Checkbox */}
-          <Form.Item
-            name="agreement"
-            valuePropName="checked"
-            rules={[
-              {
-                validator: (_, value) =>
-                  value
-                    ? Promise.resolve()
-                    : Promise.reject("You need to agree with terms"),
-              },
-            ]}
-          >
-            <Checkbox>I agree with Terms and Privacy</Checkbox>
+          <Form.Item>
+            <a style={{ display: "flex", justifyContent: "right" }} href="">
+              Forgot your password?
+            </a>
           </Form.Item>
 
           {/* Sign Up Button */}
@@ -109,7 +85,7 @@ const SignUp = () => {
                 borderRadius: "20px",
               }}
             >
-              Sign Up
+              Log In
             </Button>
           </Form.Item>
 
@@ -127,15 +103,15 @@ const SignUp = () => {
                 borderRadius: "20px",
               }}
             >
-              Sign Up with Google
+              Log In with Google
             </Button>
           </Form.Item>
 
           {/* Log In Link */}
           <div style={{ textAlign: "center" }}>
-            Already have an account?
-            <Link to="/login" style={{ color: "#A9B489" }}>
-              Log In
+            Don't have an account?
+            <Link to="/signup" style={{ color: "#A9B489" }}>
+              Sign Up
             </Link>
           </div>
         </Form>
@@ -144,4 +120,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
