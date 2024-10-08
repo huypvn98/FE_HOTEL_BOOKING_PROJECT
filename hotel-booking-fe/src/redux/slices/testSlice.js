@@ -28,7 +28,6 @@ export const testFunc = createAsyncThunk(
     try {
       const res = await getRequest(`TestAuthorize/admin`);
         return res.data;
-      
     } catch (error) {
       return rejectWithValue("Error");
     }
