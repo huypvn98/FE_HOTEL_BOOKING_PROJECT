@@ -1,22 +1,46 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import "./App.css";
 import DefaultLayout from "./layout/DefaultLayout/DefaultLayout.jsx";
-import Home from "./page/Home/Home";
+import Home from "./page/UserPages/Home/Home.jsx";
 import Test from "./page/Test/Test";
-import Login from "./page/Login/Login";
-import SignUp from "./page/SignUp/SignUp";
+import Login from "./page/UserPages/Login/Login.jsx";
+import SignUp from "./page/UserPages/SignUp/SignUp.jsx";
+import AdminLayout from "./layout/AdminLayout/AdminLayout.jsx";
+import Dashboard from "./page/AdminPages/Dashboard.jsx";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { testFunc } from "./redux/slices/testSlice.js";
+import { testData } from "./redux/selector.js";
 
 function App() {
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const data = useSelector(testData)
+  const pathname = location.pathname
+  useEffect(()=>{
+    dispatch(testFunc())
+  },[])
+  console.log(data)
   return (
-    <DefaultLayout>
-      <Routes>
-        <Route path="/" element={<Home></Home>} />
-        <Route path="/test" element={<Test></Test>} />
-        <Route path="/signup" element={<SignUp></SignUp>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="/shopping-cart" />
-      </Routes>
-    </DefaultLayout>
+   
+    <>
+    {pathname.includes("/admin") ? (
+      <AdminLayout>
+        <Routes>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+        </Routes>
+      </AdminLayout>
+    ) : (
+      <DefaultLayout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </DefaultLayout>
+    )}
+  </>
   );
 }
 
