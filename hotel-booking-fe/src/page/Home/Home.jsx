@@ -93,6 +93,7 @@ function Home() {
           </div>
         </div>
       </div>
+      
       <div className="flex flex-row justify-between mx-[305px]">
         <div className="flex flex-col pt-12 max-w-[450px] mt-[120px]">
           <div className="flex relative flex-col px-7 pb-12 w-full min-h-[600px]">

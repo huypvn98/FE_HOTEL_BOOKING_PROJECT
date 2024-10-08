@@ -105,7 +105,7 @@ export default function LoginScreen({ navigation }) {
 
         {/* Login button */}
         <TouchableOpacity className="bg-[#A9B489] rounded-lg py-3 mt-6 items-center">
-          <Text className="text-white">Login</Text>
+          <Text className="text-white font-medium text-md">Login</Text>
         </TouchableOpacity>
         
         {/* Spacer to push the "Login now" section to the bottom */}
