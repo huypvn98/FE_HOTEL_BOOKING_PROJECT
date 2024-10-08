@@ -9,6 +9,7 @@ export const axiosClientVer2 = axios.create({
   baseURL: "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net/api/",
   headers: {
     "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
     Accept: "application/json",
     Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
   },
