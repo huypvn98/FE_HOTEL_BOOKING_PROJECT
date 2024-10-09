@@ -26,7 +26,6 @@ export const testFunc = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await getRequest(`TestAuthorize/admin`);
-
       return res.data;
     } catch (error) {
       return rejectWithValue("Error");

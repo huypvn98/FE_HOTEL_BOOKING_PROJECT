@@ -9,6 +9,8 @@ import AdminLayout from "./layout/AdminLayout/AdminLayout.jsx";
 import Dashboard from "./page/AdminPages/Dashboard.jsx";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//import { authSlice } from "./redux/selector.js";
+//import { login } from "./redux/slices/authSlice.js";
 import { testFunc } from "./redux/slices/testSlice.js";
 import { testData } from "./redux/selector.js";
 import RoomManagement from "./page/AdminPages/HotelManagement/OwnerManagement.jsx";
@@ -17,16 +19,15 @@ import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx"
 import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagement.jsx";
 
 function App() {
-  const location = useLocation()
-  const dispatch = useDispatch()
-  const data = useSelector(testData)
-  const pathname = location.pathname
-  useEffect(()=>{
-    dispatch(testFunc())
-  },[])
-  console.log(data)
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const data = useSelector(testData);
+  const pathname = location.pathname;
+  useEffect(() => {
+    dispatch(testFunc());
+  }, []);
+  console.log(data);
   return (
-   
     <>
     {pathname.includes("/admin") ? (
       <AdminLayout>

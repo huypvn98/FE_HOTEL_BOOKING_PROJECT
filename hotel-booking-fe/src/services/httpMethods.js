@@ -1,7 +1,5 @@
-
 import { axiosClientVer2 } from "../axios/axiosInterceptor";
 import handleError from "../axios/error";
-
 
 // [GET]
 const getRequest = async (url) => {
@@ -66,7 +64,6 @@ const putRequest = async (url, payload) => {
 
 // [PUT] -> multipart/form-data (file, ...)
 
-
 // [PATCH]
 const patchRequest = async (url, payload) => {
   try {
@@ -84,5 +81,5 @@ export {
   deleteRequest,
   putRequest,
   patchRequest,
-  postRequestParams
+  postRequestParams,
 };
