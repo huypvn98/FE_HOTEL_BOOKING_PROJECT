@@ -11,6 +11,10 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { testFunc } from "./redux/slices/testSlice.js";
 import { testData } from "./redux/selector.js";
+import RoomManagement from "./page/AdminPages/HotelManagement/OwnerManagement.jsx";
+import BookingDetail from "./page/AdminPages/BookingDetail/BookingDetail.jsx";
+import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx";
+import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagement.jsx";
 
 function App() {
   const location = useLocation()
@@ -28,6 +32,10 @@ function App() {
       <AdminLayout>
         <Routes>
           <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/owner-management" element={<RoomManagement />} />
+          <Route path="/admin/booking-detail" element={<BookingDetail />} />
+          <Route path="/admin/user-management" element={<UserManagement />} />
+          <Route path="/admin/refund-management" element={<RefundManagement />} />
         </Routes>
       </AdminLayout>
     ) : (
