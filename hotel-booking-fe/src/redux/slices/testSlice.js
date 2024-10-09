@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getRequest, postRequest } from "../../services/httpMethods";
+import { getRequest, postRequestFormData } from "../../services/httpMethods";
 import { notification } from "antd";
 
 const initialState = {
@@ -37,7 +37,7 @@ export const registerUser = createAsyncThunk(
   "data/registerUser",
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await postRequest("Auth/register", payload);
+      const response = await postRequestFormData("Auth/register", payload);
       if (response && response.status === 200) {
         notification.success({
           message: "Registration Successful",
