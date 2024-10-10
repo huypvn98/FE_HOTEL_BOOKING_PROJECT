@@ -23,6 +23,11 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload; // Assuming the payload contains user data
+        notification.success({
+          message: "Login Successful",
+          description: "You have successfully logged in.",
+          duration: 2,
+        });
       })
       .addCase(login.pending, (state) => {
         state.loading = true;
