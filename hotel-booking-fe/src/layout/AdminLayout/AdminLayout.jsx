@@ -11,6 +11,7 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import "./AdminLayout.css";
@@ -64,6 +65,11 @@ const AdminLayout = ({ children }) => {
               key: "admin/booking-detail",
               icon: <BookOutlined />,
               label: "Booking Details",
+            },
+            {
+              key: "admin/room-management",
+              icon: <HomeOutlined />,
+              label: "Room",
             },
             {
               key: "admin/user-management",

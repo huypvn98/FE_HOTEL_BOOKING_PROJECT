@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
+  isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false, // Retrieve isAuthenticated from local storage// Add isAuthenticated to the initial state
 };
 
 export const authSlice = createSlice({
@@ -16,6 +17,13 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.error = null;
+      state.isAuthenticated = false;
+      localStorage.setItem("isAuthenticated", false);
+      notification.info({
+        message: "Logout",
+        description: "You have logged out.",
+        duration: 2,
+      })// Reset isAuthenticated on logout
     },
   },
   extraReducers: (builder) => {
@@ -23,6 +31,8 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload; // Assuming the payload contains user data
+        state.isAuthenticated = true; // Set isAuthenticated to true on successful login
+        localStorage.setItem("isAuthenticated", true);
         notification.success({
           message: "Login Successful",
           description: "You have successfully logged in.",
@@ -35,6 +45,8 @@ export const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Login failed";
+        state.isAuthenticated = false;
+        localStorage.setItem("isAuthenticated", false)
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -73,7 +85,7 @@ export const login = createAsyncThunk(
   }
 );
 
-//define the async thunk for registration
+// Define the async thunk for registration
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (payload, { rejectWithValue }) => {
