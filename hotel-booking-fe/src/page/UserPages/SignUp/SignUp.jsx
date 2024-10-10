@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import googleIcon from "../../../image/googleIcon.png";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../../redux/slices/testSlice";
+import { registerUser } from "../../../redux/slices/authSlice";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -133,7 +133,6 @@ const SignUp = () => {
               },
             ]}
             initialValue="thuong"
-            className="custom-form-item"
           >
             <Select
               size="large"

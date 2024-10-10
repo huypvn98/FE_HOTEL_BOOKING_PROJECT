@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getRequest, postRequestFormData } from "../../services/httpMethods";
-import { notification } from "antd";
+import { getRequest } from "../../services/httpMethods";
 
 const initialState = {
   data: null,
@@ -29,31 +28,6 @@ export const testFunc = createAsyncThunk(
       return res.data;
     } catch (error) {
       return rejectWithValue("Error");
-    }
-  }
-);
-
-export const registerUser = createAsyncThunk(
-  "data/registerUser",
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await postRequestFormData("Auth/register", payload);
-      if (response && response.status === 200) {
-        notification.success({
-          message: "Registration Successful",
-          description: "You have successfully registered.",
-          duration: 2,
-        });
-      }
-      return response.data;
-    } catch (error) {
-      // Show error notification
-      notification.error({
-        message: "Registration Failed",
-        description: error.response || "An error occurred during registration.",
-      });
-
-      return rejectWithValue(error.response || error.message);
     }
   }
 );
