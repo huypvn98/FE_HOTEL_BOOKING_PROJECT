@@ -1,9 +1,12 @@
 .ant-menu-item-selected {
-    background-color: #2A303D !important;
+    /* background-color: #2A303D !important; */
   }
   .demo-logo-vertical{
     height: 65px;
   }
 .ant-menu-title-content{
   font-size: 20px !important
+}
+:where(.css-dev-only-do-not-override-14qglws).ant-menu .ant-menu-title-content{
+  color: gray;
 }

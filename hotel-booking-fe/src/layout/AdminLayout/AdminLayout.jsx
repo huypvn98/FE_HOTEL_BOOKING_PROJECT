@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import {
+  BookOutlined,
+  DashboardOutlined,
   FacebookOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  MessageTwoTone,
+  MoneyCollectOutlined,
+  SettingOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import "./AdminLayout.css";
@@ -25,8 +31,7 @@ const AdminLayout = ({ children }) => {
         collapsible
         collapsed={collapsed}
         collapsedWidth={0}
-        color="light"
-        style={{ backgroundColor: "#212631" }}
+        style={{ backgroundColor: "white" }}
       >
         <div
           className="demo-logo-vertical"
@@ -37,29 +42,62 @@ const AdminLayout = ({ children }) => {
             borderBottom: "1px solid #ddd",
           }}
         >
-          <p style={{ color: "white", fontSize: "40px" }}>EASY STAY</p>
+          <p style={{  fontSize: "40px" }}>EASY STAY</p>
         </div>
         <Menu
-          theme="dark"
+          // theme="light"
           mode="inline"
           defaultSelectedKeys={["1"]}
-          style={{ backgroundColor: "#212631" }}
+          style={{ backgroundColor: "white" }}
           onClick={handleMenuClick}
           items={[
             {
               key: "admin/dashboard",
-              icon: <UserOutlined />,
+              icon: <DashboardOutlined />,
               label: "Dashboard",
             },
             {
-              key: "admin/nav2",
-              icon: <VideoCameraOutlined />,
-              label: "Nav 2",
+              key: "admin/owner-management",
+              icon: <UserOutlined />,
+              label: "Hotel Owners",
             },
             {
-              key: "admin/nav3",
-              icon: <UploadOutlined />,
-              label: "Nav 3",
+              key: "admin/booking-detail",
+              icon: <BookOutlined />,
+              label: "Booking Details",
+            },
+            {
+              key: "admin/room-management",
+              icon: <HomeOutlined />,
+              label: "Room",
+            },
+            {
+              key: "admin/user-management",
+              icon: <UserOutlined />,
+              label: "User",
+            },
+            {
+              key: "admin/refund-management",
+              icon: <MoneyCollectOutlined />,
+              label: "Refund",
+            },
+            {
+              label: "",
+            },
+            {
+              key: "admin/message",
+              icon: <MessageTwoTone />,
+              label: "Message",
+            },
+            {
+              key: "admin/help",
+              icon: <BookOutlined />,
+              label: "Help",
+            },
+            {
+              key: "admin/setting",
+              icon: <SettingOutlined />,
+              label: "Setting",
             },
           ]}
         />
@@ -68,8 +106,8 @@ const AdminLayout = ({ children }) => {
         <Header
           style={{
             padding: 0,
-            backgroundColor: "#212631",
-            color: "#FFFFFFA6",
+            background: "#F5F5F5",  
+            color: "gray",
             display: "flex",
             justifyContent: "space-between",
           }}
@@ -82,7 +120,7 @@ const AdminLayout = ({ children }) => {
               fontSize: "16px",
               width: 64,
               height: 64,
-              color: "#FFFFFFA6",
+              color: "gray",
             }}
           />
           <a
@@ -101,7 +139,7 @@ const AdminLayout = ({ children }) => {
             justifyContent: "center",
             height: "100vh",
             padding: "0px 24px",
-            background: "#1D222B",
+            background: "#F5F5F5",  
           }}
         >
           <div style={{ width: "1270px" }}>{children && children}</div>

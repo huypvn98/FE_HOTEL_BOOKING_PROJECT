@@ -1,7 +1,5 @@
-
 import { axiosClientVer2 } from "../axios/axiosInterceptor";
 import handleError from "../axios/error";
-
 
 // [GET]
 const getRequest = async (url) => {
@@ -43,6 +41,18 @@ const postRequest = async (url, payload) => {
 };
 
 // [POST] -> multipart/form-data (file, ...)
+const postRequestFormData = async (url, payload) => {
+  try {
+    const res = await axiosClientVer2.post(`${url}`, payload,{
+      headers: {
+        "Content-Type": "multipart/form-data",
+    }});
+    return res;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 
 // [DELETE]
 const deleteRequest = async (url) => {
@@ -66,7 +76,6 @@ const putRequest = async (url, payload) => {
 
 // [PUT] -> multipart/form-data (file, ...)
 
-
 // [PATCH]
 const patchRequest = async (url, payload) => {
   try {
@@ -84,5 +93,6 @@ export {
   deleteRequest,
   putRequest,
   patchRequest,
-  postRequestParams
+  postRequestParams,
+  postRequestFormData
 };
