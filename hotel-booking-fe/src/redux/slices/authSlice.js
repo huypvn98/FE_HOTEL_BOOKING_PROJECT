@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { postRequest, postRequestFormData } from "../../services/httpMethods";
-import { notification } from "antd";
+import { message } from "antd";
 
 const initialState = {
   data: null,
@@ -19,11 +19,7 @@ export const authSlice = createSlice({
       state.error = null;
       state.isAuthenticated = false;
       localStorage.setItem("isAuthenticated", false);
-      notification.info({
-        message: "Logout",
-        description: "You have logged out.",
-        duration: 2,
-      })// Reset isAuthenticated on logout
+      message.info("You have loggout"); // Reset isAuthenticated on logout
     },
   },
   extraReducers: (builder) => {
@@ -33,11 +29,7 @@ export const authSlice = createSlice({
         state.user = action.payload; // Assuming the payload contains user data
         state.isAuthenticated = true; // Set isAuthenticated to true on successful login
         localStorage.setItem("isAuthenticated", true);
-        notification.success({
-          message: "Login Successful",
-          description: "You have successfully logged in.",
-          duration: 2,
-        });
+        message.success("You have successfully logged in.");
       })
       .addCase(login.pending, (state) => {
         state.loading = true;
@@ -46,7 +38,7 @@ export const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Login failed";
         state.isAuthenticated = false;
-        localStorage.setItem("isAuthenticated", false)
+        localStorage.setItem("isAuthenticated", false);
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -92,19 +84,14 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await postRequestFormData("Auth/register", payload);
       if (response && response.status === 200) {
-        notification.success({
-          message: "Registration Successful",
-          description: "You have successfully registered.",
-          duration: 2,
-        });
+        message.success("You have successfully registered.");
       }
       return response.data;
     } catch (error) {
-      notification.error({
-        message: "Registration Failed",
-        description: error.response || "An error occurred during registration.",
-      });
-      return rejectWithValue(error.response || error.message);
+      message.error(
+        error.response.data.message || "An error occurred during registration."
+      );
+      return rejectWithValue(error.response || error.response.data.message);
     }
   }
 );
