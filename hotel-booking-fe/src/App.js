@@ -15,7 +15,8 @@ import RoomManagement from "./page/AdminPages/HotelManagement/OwnerManagement.js
 import BookingDetail from "./page/AdminPages/BookingDetail/BookingDetail.jsx";
 import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx";
 import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagement.jsx";
-
+import HotelRoomManagement from "./page/AdminPages/HotelRoomManagement/RoomManagement.jsx";
+import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,6 +49,8 @@ function App() {
             <Route path="/admin/booking-detail" element={<BookingDetail />} />
             <Route path="/admin/user-management" element={<UserManagement />} />
             <Route path="/admin/refund-management" element={<RefundManagement />} />
+            <Route path="/admin/room-management" element={<HotelRoomManagement />} />
+            <Route path="/admin/room-management/:id" element={<RoomDetail />} />
           </Routes>
         </AdminLayout>
       ) : (
