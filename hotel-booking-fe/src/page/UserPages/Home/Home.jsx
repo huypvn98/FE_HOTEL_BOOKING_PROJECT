@@ -1,14 +1,62 @@
-import React from "react";
-import { Button, Image } from "antd";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Button, DatePicker, Image, Input, Select } from "antd";
+import {
+  LeftOutlined,
+  RightOutlined,
+  CarOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 import hotel from "../../../assets/caption.jpg";
 import hotlady from "../../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
 // import profile from "../../assets/Ellipse 4.png";
 
 function Home() {
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [nights, setNights] = useState(0);
+
+  const handleCheckInChange = (date) => {
+    setCheckInDate(date);
+    if (!date || !checkOutDate) {
+      setNights(0);
+    }
+  };
+
+  const handleCheckOutChange = (date) => {
+    setCheckOutDate(date);
+    if (!date || !checkInDate) {
+      setNights(0);
+    }
+  };
+
+  useEffect(() => {
+    if (checkInDate && checkOutDate) {
+      const nightsCount = dayjs(checkOutDate).diff(dayjs(checkInDate), "day");
+      setNights(nightsCount);
+    }
+  }, [checkInDate, checkOutDate]);
+
+  const data = [
+    {
+      value: 1,
+      label: "1 room, 2 guests",
+    },
+    {
+      value: 2,
+      label: "2 rooms, 4 guests",
+    },
+    {
+      value: 3,
+      label: "1 room, 1 guest",
+    },
+  ];
+
   function ImageCard({ src, alt, className }) {
     return <img loading="lazy" src={src} alt={alt} className={className} />;
   }
+
   const images = [
     {
       src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ce0c97e87b45b29de0bf68a68edf7354395bfdfcac5df566ff94b65dab3c004b?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325",
@@ -24,8 +72,59 @@ function Home() {
   return (
     <div className="mt-[123px] mb-[160px]">
       <div className="mx-[250px]">
+        {/* search bar */}
+        <div className="border-2 py-[32px] px-[54px] h-[200px] rounded-t-lg shadow-md">
+          <div className="flex flex-row space-x-[16px] ">
+            <Input
+              className="w-[480px] h-[56px] border-[#A1A1A1] focus:ring-2 focus:ring-indigo-500 shadow-sm rounded-md px-4 py-2"
+              placeholder="Enter City or Location"
+              prefix={<CarOutlined />}
+              size="large"
+            />
+
+            <DatePicker
+              className="w-[280px] h-[56px] border-[#A1A1A1]"
+              onChange={handleCheckInChange}
+              size="large"
+              placeholder="Check-in"
+              format="ddd DD/MM"
+            />
+
+            <DatePicker
+              className="w-[280px] h-[56px] border-[#A1A1A1]"
+              onChange={handleCheckOutChange}
+              size="large"
+              placeholder="Check-out"
+              format="ddd DD/MM"
+            />
+
+            <div className="flex items-center justify-center">
+              <div className="border-2 border-[#A1A1A1] rounded-xl w-[110.73px] h-[39.89px] flex items-center justify-center">
+                <p className="font-bold text-base text-black py-[7.95px] px-[19.86px]">
+                  {nights} Night{nights !== 1 ? "" : ""}
+                </p>
+              </div>
+            </div>
+
+            <Select
+              className="w-[280px] h-[56px] border-[1px] rounded-md border-[#A1A1A1]"
+              placeholder="Select Room"
+              options={data}
+              allowClear
+            />
+          </div>
+          <div className="mt-[32px]">
+            <Link to="/hotel">
+              <button className="w-full h-[48px] bg-[#a9b489] text-white px-4 py-2 rounded-md hover:bg-[#afb896] text-[18px] font-semibold">
+                {" "}
+                <SearchOutlined /> Search
+              </button>
+            </Link>
+          </div>
+        </div>
+
         {/* hotel card*/}
-        <div>
+        <div className="mt-10">
           <div className="flex flex-row justify-between">
             <p className="font-sans font-extrabold text-2xl leading-[43.58px] items-center">
               Explore Our Popular Hotel{" "}

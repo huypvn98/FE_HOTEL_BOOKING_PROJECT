@@ -21,7 +21,7 @@ const DefaultLayout = ({ children }) => {
   };
   console.log("check isAuthenticated header", isAuthenticated);
   return (
-    <Layout>
+    <Layout className="layout">
       <header className="header">
         <div className="flex w-[400px]">
           <Menu className="header-menu w-[518px], h-[47px]" mode="horizontal">
@@ -81,6 +81,7 @@ const DefaultLayout = ({ children }) => {
         </div>
       </header>
       <Content
+        className="content"
         style={{
           background: "white",
         }}

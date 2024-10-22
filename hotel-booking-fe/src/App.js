@@ -17,6 +17,9 @@ import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx"
 import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagement.jsx";
 import HotelRoomManagement from "./page/AdminPages/HotelRoomManagement/RoomManagement.jsx";
 import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
+import HotelPage from "./page/UserPages/HotelPage/Hotel.jsx";
+
+
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,6 +63,7 @@ function App() {
             <Route path="/test" element={<Test />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/hotel" element={<HotelPage />} />
           </Routes>
         </DefaultLayout>
       )}
