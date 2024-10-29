@@ -57,7 +57,7 @@ function App() {
           </Routes>
         </AdminLayout>
       ) : (
-        <DefaultLayout>
+        <DefaultLayout isHomePage={pathname === "/"}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/test" element={<Test />} />

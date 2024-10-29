@@ -53,3 +53,11 @@
     flex-direction: column;
     gap: 10px;
   }
+
+  .home-header .ant-menu .ant-menu-title-content {
+    color: #fff;
+}
+
+.home-login-button {
+  color: black;
+}

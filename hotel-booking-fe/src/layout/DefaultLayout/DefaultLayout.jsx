@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const { Content } = Layout;
 const { Item } = Menu;
 
-const DefaultLayout = ({ children }) => {
+const DefaultLayout = ({ children , isHomePage }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state) => state.authSlice.isAuthenticated
@@ -22,7 +22,7 @@ const DefaultLayout = ({ children }) => {
   console.log("check isAuthenticated header", isAuthenticated);
   return (
     <Layout className="layout">
-      <header className="header">
+      <header className={`header ${isHomePage ? 'home-header' : ''}`} >
         <div className="flex w-[400px]">
           <Menu className="header-menu w-[518px], h-[47px]" mode="horizontal">
             <Item key="home">
@@ -49,7 +49,7 @@ const DefaultLayout = ({ children }) => {
             ) : (
               <>
                 <Button
-                  className="login-button w-[77px] h-[47px]"
+                  className={`login-button w-[77px] h-[47px] ${isHomePage ? 'home-login-button' : ''}`} 
                   style={{
                     backgroundColor: "transparent",
                     border: "0px",

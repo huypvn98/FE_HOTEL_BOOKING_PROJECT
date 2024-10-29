@@ -31,6 +31,11 @@ function HotelPage() {
     }
   }, [checkInDate, checkOutDate]);
 
+  const disabledDate = (current) => {
+    // Can not select days before today
+    return current && current < dayjs().startOf('day');
+  };
+
   const data = [
     {
       value: 1,
@@ -91,6 +96,7 @@ function HotelPage() {
             size="large"
             placeholder="Check-in"
             format="ddd DD/MM"
+            disabledDate={disabledDate}
           />
 
           <DatePicker
@@ -99,6 +105,7 @@ function HotelPage() {
             size="large"
             placeholder="Check-out"
             format="ddd DD/MM"
+            disabledDate={disabledDate}
           />
 
           <div className="flex items-center justify-center">
@@ -128,7 +135,7 @@ function HotelPage() {
                 bordered={false}
                 defaultActiveKey={["1"]}
                 expandIconPosition="right"
-                className="bg-white"
+                className="bg-white space-y-4"
               >
                 {/* Price Filter */}
                 <Collapse.Panel

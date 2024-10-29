@@ -3,6 +3,7 @@ import {  EnvironmentOutlined, HeartOutlined } from "@ant-design/icons";
 import { Button, Divider } from "antd";
 
 function HotelCard() {
+  
   const hotels = Array.from({ length: 10 }).map((_, i) => ({
     id: i,
     name: "Lemon Tree Premier Pune",
