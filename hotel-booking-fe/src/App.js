@@ -18,6 +18,7 @@ import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagemen
 import HotelRoomManagement from "./page/AdminPages/HotelRoomManagement/RoomManagement.jsx";
 import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
 import HotelPage from "./page/UserPages/HotelPage/Hotel.jsx";
+import UserProfile from "./page/UserPages/Profile/UserProfile.jsx";
 import { FloatButton } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
@@ -68,25 +69,25 @@ function App() {
           </Routes>
         </AdminLayout>
       ) : (
-        <DefaultLayout isHomePage={pathname === "/"}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/test" element={<Test />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/hotel" element={<HotelPage />} />
-          </Routes>
+        <>
+          <DefaultLayout isHomePage={pathname === "/"}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/test" element={<Test />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/hotel" element={<HotelPage />} />
+              <Route path="/profile/:id" element={<UserProfile />} />
+            </Routes>
+          </DefaultLayout>
           <FloatButton
             shape="circle"
-            style={{
-              insetInlineEnd: 24 + 70 + 70,
-            }}
             badge={{
               dot: true,
             }}
             icon={<ShoppingCartOutlined />}
           />
-        </DefaultLayout>
+        </>
       )}
     </>
   );

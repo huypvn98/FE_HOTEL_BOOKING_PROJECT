@@ -27,7 +27,7 @@ const DefaultLayout = ({ children, isHomePage }) => {
   const menu = (
     <Menu>
       <Item key="profile">
-        <Link to="/profile">Profile</Link>
+        <Link to={`/profile/${user?.userID}`}>Profile</Link>
       </Item>
       <Item key="logout" onClick={handleLogout}>
         Logout
@@ -61,7 +61,11 @@ const DefaultLayout = ({ children, isHomePage }) => {
                     alt={user ? user.username : "User"}
                     icon={!user || !user.urlImage ? <UserOutlined /> : null}
                   />
-                  <span className="ml-2">{user.username}</span>
+                  <span
+                    className={`ml-2 font-semibold text-lg ${isHomePage ? "ml-2 text-white font-semibold text-lg" : ""}`}
+                  >
+                    {user?.username}
+                  </span>
                 </div>
               </Dropdown>
             ) : (

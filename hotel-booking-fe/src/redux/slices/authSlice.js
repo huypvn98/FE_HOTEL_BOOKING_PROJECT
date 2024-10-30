@@ -4,7 +4,7 @@ import { message } from "antd";
 
 const initialState = {
   data: null,
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
   error: null,
   isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false, // Retrieve isAuthenticated from local storage// Add isAuthenticated to the initial state
@@ -18,6 +18,7 @@ export const authSlice = createSlice({
       state.user = null;
       state.error = null;
       state.isAuthenticated = false;
+      localStorage.removeItem("user"); 
       localStorage.setItem("isAuthenticated", false);
       message.info("You have loggout"); // Reset isAuthenticated on logout
     },
@@ -27,6 +28,7 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.userInfo; // Assuming the payload contains user data
+        localStorage.setItem("user", JSON.stringify(action.payload.userInfo));
         state.isAuthenticated = true; // Set isAuthenticated to true on successful login
         localStorage.setItem("isAuthenticated", true);
         message.success("You have successfully logged in.");
