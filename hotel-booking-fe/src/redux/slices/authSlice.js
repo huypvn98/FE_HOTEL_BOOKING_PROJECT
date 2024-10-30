@@ -26,7 +26,7 @@ export const authSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; // Assuming the payload contains user data
+        state.user = action.payload.userInfo; // Assuming the payload contains user data
         state.isAuthenticated = true; // Set isAuthenticated to true on successful login
         localStorage.setItem("isAuthenticated", true);
         message.success("You have successfully logged in.");

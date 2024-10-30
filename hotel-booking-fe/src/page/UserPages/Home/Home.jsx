@@ -1,21 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Button, DatePicker, Image, Input, Select } from "antd";
+import { Button, DatePicker, Input, Select } from "antd";
 import {
   LeftOutlined,
   RightOutlined,
   CarOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import hotel from "../../../assets/caption.jpg";
 import hotlady from "../../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
 import image from "../../../image/backgroundImage.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHotels } from "../../../redux/slices/hotelSlice";
+import { MagnifyingGlass } from "react-loader-spinner";
 
 function Home() {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [nights, setNights] = useState(0);
+  const [room, setRoom] = useState(null);
+  const [location, setLocation] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { hotels, loading, error } = useSelector((state) => state.hotel);
+  const baseURL =
+    "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
+
+  useEffect(() => {
+    dispatch(fetchHotels());
+  }, [dispatch]);
 
   const handleCheckInChange = (date) => {
     setCheckInDate(date);
@@ -37,6 +51,18 @@ function Home() {
       setNights(nightsCount);
     }
   }, [checkInDate, checkOutDate]);
+
+  const handleSearch = () => {
+    const queryParams = new URLSearchParams({
+      location,
+      checkInDate: checkInDate ? checkInDate.format("YYYY-MM-DD") : "",
+      checkOutDate: checkOutDate ? checkOutDate.format("YYYY-MM-DD") : "",
+      nights,
+      roomValue: room ? room.value : "",
+      roomLabel: room ? room.label : "",
+    }).toString();
+    navigate(`/hotel?${queryParams}`);
+  };
 
   const data = [
     {
@@ -69,9 +95,20 @@ function Home() {
       className: "object-contain z-10 mt-0 w-full aspect-[0.68]",
     },
   ];
+
+  const disabledDate = (current) => {
+    // Can not select days before today
+    return current && current < dayjs().startOf("day");
+  };
+
   return (
     <div>
-      <img src={image} alt="background" className="w-full h-[800px]" />
+      <img
+        loading="lazy"
+        src={image}
+        alt="background"
+        className="w-full h-[800px]"
+      />
       <div className="mb-[160px]">
         <div className="mx-[250px]">
           {/* search bar */}
@@ -82,11 +119,13 @@ function Home() {
                 placeholder="Enter City or Location"
                 prefix={<CarOutlined />}
                 size="large"
+                onChange={(e) => setLocation(e.target.value)}
               />
 
               <DatePicker
                 className="w-[280px] h-[56px] border-[#A1A1A1]"
                 onChange={handleCheckInChange}
+                disabledDate={disabledDate}
                 size="large"
                 placeholder="Check-in"
                 format="ddd DD/MM"
@@ -95,6 +134,7 @@ function Home() {
               <DatePicker
                 className="w-[280px] h-[56px] border-[#A1A1A1]"
                 onChange={handleCheckOutChange}
+                disabledDate={disabledDate}
                 size="large"
                 placeholder="Check-out"
                 format="ddd DD/MM"
@@ -103,7 +143,7 @@ function Home() {
               <div className="flex items-center justify-center">
                 <div className="border-2 border-[#A1A1A1] rounded-xl w-[110.73px] h-[39.89px] flex items-center justify-center">
                   <p className="font-bold text-base text-black py-[7.95px] px-[19.86px]">
-                    {nights} Night{nights !== 1 ? "" : ""}
+                    {nights} Night{nights !== 1 ? "s" : ""}
                   </p>
                 </div>
               </div>
@@ -113,15 +153,19 @@ function Home() {
                 placeholder="Select Room"
                 options={data}
                 allowClear
+                onChange={(value) =>
+                  setRoom(data.find((option) => option.value === value))
+                }
               />
             </div>
             <div className="mt-[32px]">
-              <Link to="/hotel">
-                <button className="w-full h-[48px] bg-[#a9b489] text-white px-4 py-2 rounded-md hover:bg-[#afb896] text-[18px] font-semibold">
-                  {" "}
-                  <SearchOutlined /> Search
-                </button>
-              </Link>
+              <button
+                className="w-full h-[48px] bg-[#a9b489] text-white px-4 py-2 rounded-md hover:bg-[#afb896] text-[18px] font-semibold"
+                onClick={handleSearch}
+              >
+                {" "}
+                <SearchOutlined /> Search
+              </button>
             </div>
           </div>
 
@@ -156,40 +200,59 @@ function Home() {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-4 pt-[60px]">
-              {[...Array(4)].map((_, index) => (
-                <div key={index} className="space-y-4">
-                  <div>
-                    <img
-                      alt="hotel"
-                      src={hotel}
-                      className="rounded-[24px]"
-                      style={{ height: "404px", width: "330px" }}
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-3">
-                    <div>
-                      <p className="font-sans font-bold leading-[32.68px] text-[24px]">
-                        GRAND SAIGON
-                      </p>
-                      <p>HCM city</p>
-                    </div>
-                    <div className="flex flex-row space-x-2 items-center">
-                      <p className="text-[#A9B489] font-bold text-[24px] leading-[32.68px]">
-                        $40
-                      </p>
-                      <p className="text-[18px] leading-[24.51px] font-semibold">
-                        per night
-                      </p>
-                    </div>
-                    <div>
-                      <p className="font-normal font-sans text-[18px] leading-[26px]">
-                        Visit the beautiful Siena and the cities that surround
-                        it to experience ...
-                      </p>
-                    </div>
-                  </div>
+              {loading ? (
+                <div className="flex justify-center items-center h-full">
+                  <MagnifyingGlass
+                    visible={true}
+                    height="80"
+                    width="80"
+                    ariaLabel="magnifying-glass-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="magnifying-glass-wrapper"
+                    glassColor="#c0efff"
+                    color="#a9b489"
+                  />
                 </div>
-              ))}
+              ) : error ? (
+                <p>Error: {error}</p>
+              ) : (
+                Array.isArray(hotels) &&
+                hotels.map((hotel) => (
+                  <Link to={`/hotel/detail/${hotel.hotelID}`}>
+                    <div key={hotel.hotelID} className="space-y-4">
+                      <div>
+                        <img
+                          alt="hotel"
+                          src={`${baseURL}${hotel.urlImage}`}
+                          className="rounded-[24px]"
+                          style={{ height: "404px", width: "330px" }}
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-3">
+                        <div>
+                          <p className="font-sans font-bold leading-[32.68px] text-[24px]">
+                            {hotel.hotelName}
+                          </p>
+                          <p>HCM city</p>
+                        </div>
+                        <div className="flex flex-row space-x-2 items-center">
+                          <p className="text-[#A9B489] font-bold text-[24px] leading-[32.68px]">
+                            $40
+                          </p>
+                          <p className="text-[18px] leading-[24.51px] font-semibold">
+                            per night
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-normal font-sans text-[18px] leading-[26px] line-clamp-2">
+                            {hotel.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -251,15 +314,21 @@ function Home() {
 
         {/* Most picket */}
         <div className="mx-[250px] grid grid-cols-4 gap-[29px] mt-[120px]">
-          {[...Array(8)].map((_, index) => (
-            <div key={index} className="flex flex-col">
-              <img className="w-[263px] h-[180px] rounded-[15px]" src={hotel} />
-              <div className="mt-[20px]">
-                <p className="font-sans">GRAND SAIGON</p>
-                <p className="font-sans text-[#B0B0B0]">HCM city</p>
-              </div>
-            </div>
-          ))}
+          {Array.isArray(hotels) &&
+            hotels.map((hotel) => (
+              <Link to={`/hotel/detail/${hotel.hotelID}`}>
+                <div key={hotel.hotelID} className="flex flex-col">
+                  <img
+                    className="w-[263px] h-[180px] rounded-[15px]"
+                    src={`${baseURL}${hotel.urlImage}`}
+                  />
+                  <div className="mt-[20px]">
+                    <p className="font-sans">{hotel.hotelName}</p>
+                    <p className="font-sans text-[#B0B0B0]">HCM city</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
         </div>
 
         {/* customer comment */}

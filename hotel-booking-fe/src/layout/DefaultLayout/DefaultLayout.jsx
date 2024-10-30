@@ -1,28 +1,43 @@
-import { Button, Layout, Menu, Select } from "antd";
+import { Layout, Menu, Select, Button, Dropdown, Avatar } from "antd";
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import "./DefaultLayout.css";
 import { logout } from "../../redux/slices/authSlice";
-import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 const { Content } = Layout;
 const { Item } = Menu;
 
-const DefaultLayout = ({ children , isHomePage }) => {
+const DefaultLayout = ({ children, isHomePage }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
-    (state) => state.authSlice.isAuthenticated
+    (state) => state.authSlice?.isAuthenticated
   );
+  const user = useSelector((state) => state.authSlice?.user);
   const navigate = useNavigate();
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
-  console.log("check isAuthenticated header", isAuthenticated);
+
+  const baseURL =
+    "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
+  const menu = (
+    <Menu>
+      <Item key="profile">
+        <Link to="/profile">Profile</Link>
+      </Item>
+      <Item key="logout" onClick={handleLogout}>
+        Logout
+      </Item>
+    </Menu>
+  );
+
   return (
     <Layout className="layout">
-      <header className={`header ${isHomePage ? 'home-header' : ''}`} >
+      <header className={`header ${isHomePage ? "home-header" : ""}`}>
         <div className="flex w-[400px]">
           <Menu className="header-menu w-[518px], h-[47px]" mode="horizontal">
             <Item key="home">
@@ -35,21 +50,26 @@ const DefaultLayout = ({ children , isHomePage }) => {
           <div className="header-function ml-[167px] flex">
             <Select className="w-[80px] h-[47px]" placeholder="Eng"></Select>
             {isAuthenticated ? (
-              <Button
-                className="logout-button w-[77px] h-[47px]"
-                style={{
-                  backgroundColor: "transparent",
-                  border: "0px",
-                  boxShadow: "none",
-                }}
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <div className="flex items-center cursor-pointer">
+                  <Avatar
+                    src={
+                      user && user.urlImage
+                        ? `${baseURL}${user.urlImage}`
+                        : null
+                    }
+                    alt={user ? user.username : "User"}
+                    icon={!user || !user.urlImage ? <UserOutlined /> : null}
+                  />
+                  <span className="ml-2">{user.username}</span>
+                </div>
+              </Dropdown>
             ) : (
               <>
                 <Button
-                  className={`login-button w-[77px] h-[47px] ${isHomePage ? 'home-login-button' : ''}`} 
+                  className={`login-button w-[77px] h-[47px] ${
+                    isHomePage ? "home-login-button" : ""
+                  }`}
                   style={{
                     backgroundColor: "transparent",
                     border: "0px",

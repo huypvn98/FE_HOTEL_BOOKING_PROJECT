@@ -18,14 +18,17 @@ import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagemen
 import HotelRoomManagement from "./page/AdminPages/HotelRoomManagement/RoomManagement.jsx";
 import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
 import HotelPage from "./page/UserPages/HotelPage/Hotel.jsx";
-
+import { FloatButton } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector(testData);
-  const isAuthenticated = useSelector((state) => state.authSlice?.isAuthenticated); // Get isAuthenticated from the Redux store
+  const isAuthenticated = useSelector(
+    (state) => state.authSlice?.isAuthenticated
+  ); // Get isAuthenticated from the Redux store
   console.log("check isAuthenticated", isAuthenticated);
   const pathname = location.pathname;
 
@@ -39,7 +42,6 @@ function App() {
     }
   }, [isAuthenticated, pathname, navigate]);
 
- 
   console.log("check data", data);
 
   return (
@@ -48,11 +50,20 @@ function App() {
         <AdminLayout>
           <Routes>
             <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/owner-management" element={<RoomManagement />} />
+            <Route
+              path="/admin/owner-management"
+              element={<RoomManagement />}
+            />
             <Route path="/admin/booking-detail" element={<BookingDetail />} />
             <Route path="/admin/user-management" element={<UserManagement />} />
-            <Route path="/admin/refund-management" element={<RefundManagement />} />
-            <Route path="/admin/room-management" element={<HotelRoomManagement />} />
+            <Route
+              path="/admin/refund-management"
+              element={<RefundManagement />}
+            />
+            <Route
+              path="/admin/room-management"
+              element={<HotelRoomManagement />}
+            />
             <Route path="/admin/room-management/:id" element={<RoomDetail />} />
           </Routes>
         </AdminLayout>
@@ -65,6 +76,16 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/hotel" element={<HotelPage />} />
           </Routes>
+          <FloatButton
+            shape="circle"
+            style={{
+              insetInlineEnd: 24 + 70 + 70,
+            }}
+            badge={{
+              dot: true,
+            }}
+            icon={<ShoppingCartOutlined />}
+          />
         </DefaultLayout>
       )}
     </>
