@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 //import { login } from "./redux/slices/authSlice.js";
 import { testFunc } from "./redux/slices/testSlice.js";
 import { testData } from "./redux/selector.js";
-import RoomDetail from "./page/UserPages/RoomDetail/RoomDetail.jsx";
+import HotelDetail from "./page/UserPages/RoomDetail/HotelDetail.jsx";
 
 function App() {
   const location = useLocation();
@@ -39,7 +39,7 @@ function App() {
             <Route path="/test" element={<Test />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/roomdetail" element={<RoomDetail />} />
+            <Route path="/hoteldetail" element={<HotelDetail />} />
           </Routes>
         </DefaultLayout>
       )}
