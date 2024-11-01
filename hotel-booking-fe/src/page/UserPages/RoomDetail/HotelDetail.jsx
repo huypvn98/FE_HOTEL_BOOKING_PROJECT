@@ -1,6 +1,7 @@
 import React from "react";
 import pointer from "../../../assets/pointer.png";
-import { Badge, Button } from "antd";
+import { Badge, Button, Space } from "antd";
+import { HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
 
 const HotelDetail = () => {
   const images = [
@@ -142,19 +143,36 @@ const HotelDetail = () => {
           <StarIcon />
           <StarIcon /> <div style={{ marginLeft: "5px" }}>5 Star Hotel</div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold">¥ 2,350/nights</span>
-          <Button
-            style={{ background: "#1E91B6", border: "none", color: "white" }}
-          >
-            Book Now
-          </Button>
+        <div
+          style={{ flexDirection: "column" }}
+          className="flex items-center gap-2"
+        >
+          <div className="text-2xl font-bold">¥ 2,350/nights</div>
+          {/* Icon Buttons */}
+          <div className="flex items-center gap-2">
+            <Button
+              shape="default"
+              icon={<HeartOutlined />}
+              className="icon-button"
+            />
+            <Button
+              shape="default"
+              icon={<ShareAltOutlined />}
+              className="icon-button"
+            />
+            <Button
+              style={{ background: "#1E91B6", border: "none", color: "white" }}
+            >
+              Book Now
+            </Button>
+          </div>
         </div>
       </div>
       <div
         style={{
           display: "flex",
           alignItems: "center",
+          margin: "-20px 0 0 0 ",
         }}
       >
         <img src={pointer} style={{ height: "15px", margin: "2px 2px 0 0" }} />
