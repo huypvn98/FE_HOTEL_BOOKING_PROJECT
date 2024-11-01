@@ -1,11 +1,13 @@
-import React from "react";
-import { Button, Image } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import hotel from "../../../assets/caption.jpg";
 import hotlady from "../../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHotels } from "../../../redux/slices/hotelSlice";
 // import profile from "../../assets/Ellipse 4.png";
 
-function Home() {
+const Home = () => {
   function ImageCard({ src, alt, className }) {
     return <img loading="lazy" src={src} alt={alt} className={className} />;
   }
@@ -21,8 +23,33 @@ function Home() {
       className: "object-contain z-10 mt-0 w-full aspect-[0.68]",
     },
   ];
+
+  //const [hotel, setHotels] = useState([]);
+  const baseURL =
+    "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
+  const dispatch = useDispatch();
+  const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
+
+  useEffect(() => {
+    dispatch(fetchHotels());
+  }, [dispatch]);
+
+  // Log to debug the current state of hotels
+  console.log("Hotels:", hotels); // This should show the array of hotel objects
+
+  if (loading) return <p>Loading hotels...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <div className="mt-[123px] mb-[160px]">
+      <div>
+        <ul>
+          {(Array.isArray(hotels) ? hotels : []).map((hotel) => (
+            <li key={hotel.id}>{hotel.name}</li>
+          ))}
+        </ul>
+      </div>
+
       <div className="mx-[250px]">
         {/* hotel card*/}
         <div>
@@ -55,40 +82,44 @@ function Home() {
             </div>
           </div>
           <div className="grid grid-cols-4 gap-4 pt-[60px]">
-            {[...Array(4)].map((_, index) => (
-              <div key={index} className="space-y-4">
-                <div>
-                  <img
-                    alt="hotel"
-                    src={hotel}
-                    className="rounded-[24px]"
-                    style={{ height: "404px", width: "330px" }}
-                  />
-                </div>
-                <div className="flex flex-col space-y-3">
+            {Array.isArray(hotels) && hotels.length > 0 ? (
+              hotels.map((hotel, index) => (
+                <div key={index} className="space-y-4">
                   <div>
-                    <p className="font-sans font-bold leading-[32.68px] text-[24px]">
-                      GRAND SAIGON
-                    </p>
-                    <p>HCM city</p>
+                    <img
+                      alt={hotel.hotelName} // Use the hotel name for accessibility
+                      src={hotel.imageUrl || "default_image_path.jpg"} // Fallback image path
+                      className="rounded-[24px]"
+                      style={{ height: "404px", width: "330px" }}
+                    />
                   </div>
-                  <div className="flex flex-row space-x-2 items-center">
-                    <p className="text-[#A9B489] font-bold text-[24px] leading-[32.68px]">
-                      $40
-                    </p>
-                    <p className="text-[18px] leading-[24.51px] font-semibold">
-                      per night
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-normal font-sans text-[18px] leading-[26px]">
-                      Visit the beautiful Siena and the cities that surround it
-                      to experience ...
-                    </p>
+                  <div className="flex flex-col space-y-3">
+                    <div>
+                      <p className="font-sans font-bold leading-[32.68px] text-[24px]">
+                        {hotel.hotelName}
+                      </p>
+                      <p>{hotel.location || "HCM City"}</p>
+                      {/* Fallback location */}
+                    </div>
+                    <div className="flex flex-row space-x-2 items-center">
+                      <p className="text-[#A9B489] font-bold text-[24px] leading-[32.68px]">
+                        ${hotel.price || "0"}
+                      </p>
+                      <p className="text-[18px] leading-[24.51px] font-semibold">
+                        per night
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-normal font-sans text-[18px] leading-[26px]">
+                        {hotel.description || "Description not available."}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div>No hotels available</div>
+            )}
           </div>
         </div>
       </div>
@@ -261,6 +292,6 @@ function Home() {
       </div>
     </div>
   );
-}
+};
 
 export default Home;
