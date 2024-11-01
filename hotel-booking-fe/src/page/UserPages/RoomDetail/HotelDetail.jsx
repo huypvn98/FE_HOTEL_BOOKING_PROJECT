@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import pointer from "../../../assets/pointer.png";
-import { Badge, Button, Space } from "antd";
+import { Badge, Button } from "antd";
 import { HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import "./HotelDetail.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { fetchHotelDetail } from "../../../redux/slices/hotelSlice";
+import { hotelDetail } from "../../../redux/selector";
 
 const HotelDetail = () => {
   const images = [
@@ -128,15 +132,31 @@ const HotelDetail = () => {
     </svg>
   );
 
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const hotel = useSelector(hotelDetail);
+
+  useEffect(() => {
+    dispatch(fetchHotelDetail(id));
+  }, [dispatch, id]);
+
+  console.log("Hotel ID:", id);
+
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
+
+  // Add a check to handle the case when hotel data is not yet loaded
+  //if (!hotel) return <div>No hotel data available</div>;
+
   return (
     <div style={{ marginTop: "100px" }} className="max-w-6xl mx-auto p-4">
       {/* Header */}
       <h1 style={{ marginBottom: "20px" }} className="text-1xl font-bold">
-        Maharashtra {">"} Pune {">"} Lemon Tree Premier Pune
+        HCM City {">"} {hotel?.hotelName}
       </h1>
 
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Lemon Tree Premier Pune</h1>
+        <h1 className="text-3xl font-bold">{hotel?.hotelName}</h1>
         <div style={{ display: "flex", marginRight: "250px" }}>
           <StarIcon />
           <StarIcon />
@@ -234,27 +254,7 @@ const HotelDetail = () => {
       {/* Overview */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-bold mb-4">Overview</h2>
-        <p className="text-gray-600 mb-4">
-          Overview Lemon Tree Premier, City Center Pune is a great choice for
-          travellers looking for a 5 star hotel in Pune. It is located in Near
-          Pune Train Station.This Hotel stands out as one of the highly
-          recommended hotel in Pune and is recommended by 86% of our guests.
-          Hotel is rated 4.1 out of 5, which is considered as very good. The
-          property enjoys a great location advantage and provides easy and fast
-          connectivity to the major transit points of the city. Some of the
-          popular transit points from Lemon Tree Premier, City Center Pune are
-          Pune Railway Station (520 mtrs), Pune Station Bus Stand (1.7 kms) and
-          Pune International Airport (7.8 kms). The Hotel is in proximity to
-          some popular tourist attractions and other places of interest in Pune.
-          Some of the tourist attractions near Lemon Tree Premier, City Center
-          Pune Nucleus Mall (970 mtrs), Shaniwar Wada (2.9 kms), Pataleshwar
-          Caves (3.5 kms) and FC Road (4.8 kms).From all the 4 Star hotels in
-          Pune, Lemon Tree Premier, City Center Pune is very much popular among
-          the tourists. A smooth check-in/check-out process, flexible policies
-          and friendly management garner great customer satisfaction for this
-          property. The Hotel has standard Check-In time as 02:00 PM and
-          Check-Out time as 12:00 PM.
-        </p>
+        <p className="text-gray-600 mb-4">{hotel?.description}</p>
         <div className="flex gap-6">
           {amenities.map((amenity, idx) => (
             <div key={idx} className="flex items-center gap-2">

@@ -1,19 +1,38 @@
 import React from "react";
 import "./SignUp.css";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, Select } from "antd";
 import {
-  GoogleOutlined,
   LockOutlined,
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import googleIcon from "../../../image/googleIcon.png";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../redux/slices/authSlice";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    dispatch(registerUser(values));
   };
+
+  const options = [
+    {
+      value: "thuong",
+      label: "Email thường",
+    },
+    {
+      value: "email co quan",
+      label: "Email cơ quan ",
+    },
+    {
+      value: "email giao duc",
+      label: "Email giáo dục",
+      
+    },
+  ];
 
   return (
     <div className="bgImage">
@@ -30,27 +49,63 @@ const SignUp = () => {
           onFinish={onFinish}
           layout="vertical"
         >
-          {/* Name Field */}
+          {/* First Name Field */}
           <Form.Item
-            name="name"
-            label="Name"
+            name="FirstName"
+            label="First name"
             rules={[
               {
                 required: true,
-                message: "Please enter your name!",
+                message: "Please enter your first name!",
               },
             ]}
           >
             <Input
               size="large"
               prefix={<UserOutlined />}
-              placeholder="Enter your name"
+              placeholder="Enter your first name"
+            />
+          </Form.Item>
+
+          {/* Last Name Field */}
+          <Form.Item
+            name="LastName"
+            label="Last name"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your last name!",
+              },
+            ]}
+          >
+            <Input
+              size="large"
+              prefix={<UserOutlined />}
+              placeholder="Enter your last name"
+            />
+          </Form.Item>
+
+          {/* User Name Field */}
+          <Form.Item
+            name="UserName"
+            label="User name"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your user name!",
+              },
+            ]}
+          >
+            <Input
+              size="large"
+              prefix={<UserOutlined />}
+              placeholder="Enter your user name"
             />
           </Form.Item>
 
           {/* Email Field */}
           <Form.Item
-            name="email"
+            name="Email"
             label="Email Address"
             rules={[
               {
@@ -67,9 +122,29 @@ const SignUp = () => {
             />
           </Form.Item>
 
+          <Form.Item
+            name="EmailType"
+            label="Email Type"
+            rules={[
+              {
+                required: true,
+                message: "Please select an email type!",
+              },
+            ]}
+            initialValue="thuong"
+          >
+            <Select
+              size="large"
+              prefix={<MailOutlined />}
+              placeholder="Select your email type"
+              className="border-[1.5px] rounded-md"
+              options={options}
+            />
+          </Form.Item>
+
           {/* Password Field */}
           <Form.Item
-            name="password"
+            name="Password"
             label="Password"
             rules={[{ required: true, message: "Please enter your password!" }]}
           >
@@ -120,7 +195,7 @@ const SignUp = () => {
             <Button
               size="large"
               block
-              icon={<img src={googleIcon} style={{ width: "20px" }} />}
+              icon={<img src={googleIcon} alt="" style={{ width: "20px" }} />}
               style={{
                 backgroundColor: "#fff",
                 color: "#000",
