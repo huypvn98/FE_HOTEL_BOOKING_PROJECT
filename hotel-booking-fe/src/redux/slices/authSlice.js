@@ -22,6 +22,10 @@ export const authSlice = createSlice({
       localStorage.setItem("isAuthenticated", false);
       message.info("You have loggout"); // Reset isAuthenticated on logout
     },
+    updateUserInfo: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,5 +102,5 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const { logout } = authSlice.actions;
+export const { logout , updateUserInfo} = authSlice.actions;
 export default authSlice; // Export the reducer, not the slice itself
