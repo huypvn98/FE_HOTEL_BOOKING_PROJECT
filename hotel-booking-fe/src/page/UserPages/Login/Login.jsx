@@ -32,9 +32,13 @@ const Login = () => {
     dispatch(login({ username, password }))
     .then((res)=>{
       console.log(res)
-      if(res.payload && res.payload.status === 200){
+      if(res.payload && res.payload.status === 200 && res.payload.data.userInfo.roles === "Admin"){
           navigate("admin")
-      } else{
+      } else if (res.payload && res.payload.status === 200 && res.payload.data.userInfo.roles === "Customer"){
+        navigate("/")
+        localStorage.setItem("role", res.payload.data.userInfo.roles)
+      }    
+      else{
         message.error("Wrong username or password")
       }
       // navigate("admin")

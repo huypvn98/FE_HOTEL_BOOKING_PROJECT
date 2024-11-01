@@ -106,6 +106,6 @@ export {
   putRequest,
   patchRequest,
   postRequestParams,
-  postRequestMultipartFormData
+  postRequestMultipartFormData,
   postRequestFormData
 };
