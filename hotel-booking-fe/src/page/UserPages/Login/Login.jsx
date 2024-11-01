@@ -4,19 +4,32 @@ import {
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
-import React from "react";
+import { Button, Form, Input } from "antd";
+import React, { useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import googleIcon from "../../../image/googleIcon.png";
+import { useDispatch } from "react-redux";
+import { login } from "../../../redux/slices/authSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  //const loading = useSelector((state) => state.auth.loading);
+  //const error = useSelector((state) => state.auth.error);
+
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  const handleLogin = () => {
+    dispatch(login({ username, password }));
+  };
+
   return (
     <div className="bgImage">
       <div className="overlay"></div>
@@ -33,15 +46,14 @@ const Login = () => {
           onFinishFailed={onFinishFailed}
           layout="vertical"
         >
-          {/* Email Field */}
+          {/* Username Field */}
           <Form.Item
-            name="email"
-            label="Email Address"
+            name="username"
+            label="Username"
             rules={[
               {
                 required: true,
-                type: "email",
-                message: "Please enter a valid email!",
+                message: "Please enter your username!",
               },
             ]}
           >
@@ -49,6 +61,8 @@ const Login = () => {
               size="large"
               prefix={<MailOutlined />}
               placeholder="Enter your email address"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </Form.Item>
 
@@ -62,6 +76,9 @@ const Login = () => {
               size="large"
               prefix={<LockOutlined />}
               placeholder="Enter your password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Item>
 
@@ -84,8 +101,10 @@ const Login = () => {
                 borderColor: "#A9B489",
                 borderRadius: "20px",
               }}
+              //disabled={loading}
+              onClick={handleLogin}
             >
-              Log In
+              Login
             </Button>
           </Form.Item>
 
