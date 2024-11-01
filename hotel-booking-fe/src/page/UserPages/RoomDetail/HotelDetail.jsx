@@ -2,6 +2,7 @@ import React from "react";
 import pointer from "../../../assets/pointer.png";
 import { Badge, Button, Space } from "antd";
 import { HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
+import "./HotelDetail.css";
 
 const HotelDetail = () => {
   const images = [
@@ -223,6 +224,12 @@ const HotelDetail = () => {
           </div>
         ))}
       </div>
+      <Button
+        style={{ background: "#8DD3BB", border: "none", color: "black" }}
+        className="view-all-button"
+      >
+        View all photos
+      </Button>
 
       {/* Overview */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
