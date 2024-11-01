@@ -162,7 +162,7 @@ const HotelDetail = () => {
               className="icon-button"
             />
             <Button
-              style={{ background: "#1E91B6", border: "none", color: "white" }}
+              style={{ background: "#a9b489", border: "none", color: "white" }}
             >
               Book Now
             </Button>
@@ -191,9 +191,9 @@ const HotelDetail = () => {
           count="4.2"
           style={{
             backgroundColor: "#fff",
-            color: "#1d4ed8",
+            color: "black",
             fontSize: "20px",
-            border: "1px solid #1d4ed8",
+            border: "1px solid #a9b489",
             padding: "10px 20px 30px 20px",
             borderRadius: "4px",
             margin: "0 2px 0 0",
@@ -270,7 +270,7 @@ const HotelDetail = () => {
         className="flex flex-wrap items-center gap-4"
       >
         {/* Rating Box */}
-        <div className="bg-[#00A0C1] rounded-lg p-4 text-white text-center min-w-[120px]">
+        <div className="bg-[#a9b489] rounded-lg p-4 text-white text-center min-w-[120px]">
           <div className="text-3xl font-bold">4.2</div>
           <div className="text-sm">Very good</div>
           <div className="text-xs">371 reviews</div>
@@ -310,7 +310,7 @@ const HotelDetail = () => {
                 <span className="font-bold">{room.price}</span>
                 <Button
                   style={{
-                    background: "#1E91B6",
+                    background: "#a9b489",
                     border: "none",
                     color: "white",
                   }}
@@ -330,7 +330,7 @@ const HotelDetail = () => {
           <div className="flex justify-end">
             <Button
               style={{
-                background: "#1E91B6",
+                background: "#a9b489",
                 border: "none",
                 color: "white",
                 marginTop: "-20px",
@@ -390,7 +390,7 @@ const HotelDetail = () => {
             </div>
           </div>
           <Button
-            style={{ background: "#1E91B6", border: "none", color: "white" }}
+            style={{ background: "#a9b489", border: "none", color: "white" }}
           >
             Give your review
           </Button>
