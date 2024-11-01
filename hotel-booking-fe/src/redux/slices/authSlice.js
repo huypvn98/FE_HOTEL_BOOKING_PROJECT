@@ -43,7 +43,8 @@ export const login = createAsyncThunk(
         username,
         password,
       });
-      return res.data; // Assuming the response contains user data
+      console.log(res)
+      return res; 
     } catch (error) {
       // Check if the error response is available
       if (error.response && error.response.data) {

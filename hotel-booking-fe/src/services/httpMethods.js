@@ -1,3 +1,4 @@
+import axios from "axios";
 import { axiosClientVer2 } from "../axios/axiosInterceptor";
 import handleError from "../axios/error";
 
@@ -39,7 +40,20 @@ const postRequest = async (url, payload) => {
     return handleError(error);
   }
 };
-
+const postRequestMultipartFormData = async (url, payload) => {
+  try {
+    const res = await axios.post(`${url}`, payload, {
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        ContentType: "multipart/form-data",
+        Authorization: sessionStorage.getItem("token"),
+      },
+    });
+    return res;
+  } catch (error) {
+    return handleError(error);
+  }
+};
 // [POST] -> multipart/form-data (file, ...)
 
 // [DELETE]
@@ -62,9 +76,7 @@ const putRequest = async (url, payload) => {
   }
 };
 
-// [PUT] -> multipart/form-data (file, ...)
 
-// [PATCH]
 const patchRequest = async (url, payload) => {
   try {
     const res = await axiosClientVer2.patch(`${url}`, payload);
@@ -82,4 +94,5 @@ export {
   putRequest,
   patchRequest,
   postRequestParams,
+  postRequestMultipartFormData
 };

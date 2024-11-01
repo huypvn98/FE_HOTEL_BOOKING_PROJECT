@@ -4,18 +4,20 @@ import {
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import React, { useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import googleIcon from "../../../image/googleIcon.png";
 import { useDispatch } from "react-redux";
 import { login } from "../../../redux/slices/authSlice";
+import { testFunc } from "../../../redux/slices/testSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
   //const loading = useSelector((state) => state.auth.loading);
   //const error = useSelector((state) => state.auth.error);
 
@@ -27,7 +29,16 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    dispatch(login({ username, password }));
+    dispatch(login({ username, password }))
+    .then((res)=>{
+      console.log(res)
+      if(res.payload && res.payload.status === 200){
+          navigate("admin")
+      } else{
+        message.error("Wrong username or password")
+      }
+      // navigate("admin")
+    })
   };
 
   return (

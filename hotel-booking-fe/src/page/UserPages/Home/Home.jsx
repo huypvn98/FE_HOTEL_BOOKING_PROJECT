@@ -1,11 +1,17 @@
-import React from "react";
-import { Button, Image } from "antd";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { Button, Col, Image, Row, Select } from "antd";
+import { LeftOutlined, ProfileOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
+import "./Home.css"
 import hotel from "../../../assets/caption.jpg";
 import hotlady from "../../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
 // import profile from "../../assets/Ellipse 4.png";
 
 function Home() {
+  const [activeButton, setActiveButton] = useState(null);
+
+  const handleButtonClick = (button) => {
+    setActiveButton(button);
+  };
   function ImageCard({ src, alt, className }) {
     return <img loading="lazy" src={src} alt={alt} className={className} />;
   }
@@ -22,7 +28,70 @@ function Home() {
     },
   ];
   return (
-    <div className="mt-[123px] mb-[160px]">
+    <div className="">
+    <div className="home-hero">
+         <div className="date-container">
+              <div className="date-picker-text">
+                <h1 style={{fontWeight:"600", fontSize:"72px", display:"flex", alignContent:"center",justifyContent:"center"}}>Enjoy in the best way</h1>
+                <h1 style={{fontWeight:"900", fontSize:"24px", display:"flex", alignContent:"center",justifyContent:"center"}}>Enjoy our services for your trip anytime</h1>
+              </div>
+              <div className="date-picker">
+              <Button.Group style={{paddingTop:"20px", paddingLeft:"20px"}}>
+        <Button
+          onClick={() => handleButtonClick('prev')}
+          style={{
+            backgroundColor: activeButton === 'prev' ? 'white' : '#FFFFFF66',
+            color: activeButton === 'prev' ? '#000' : '#FFF',
+            borderColor: '#FFFFFF66',
+            borderBottomLeftRadius:"0px"
+          }}
+        >
+          Previous
+        </Button>
+        <Button
+          onClick={() => handleButtonClick('next')}
+          style={{
+            backgroundColor: activeButton === 'next' ? 'white' : '#FFFFFF66',
+            color: activeButton === 'next' ? '#000' : '#FFF',
+            borderColor: '#FFFFFF66'
+          }}
+        >
+          Next
+        </Button>
+      </Button.Group>
+      <div className="date-picker-selects">
+          <Row>
+              <Col span={4} style={{display:"flex" ,justifyContent:"center", alignItems:"center", padding:"12px",height:"88px", flexDirection:"column"}}>
+                <p><ProfileOutlined></ProfileOutlined> Number of People</p>
+                <Select style={{width:"145px"}} placeholder="Choose number"></Select>
+              </Col>
+              <Col span={4} style={{display:"flex" ,justifyContent:"center", alignItems:"center", padding:"12px",height:"88px", flexDirection:"column"}}>
+                <p><ProfileOutlined></ProfileOutlined> Number of People</p>
+                <Select style={{width:"145px"}} placeholder="Choose number"></Select>
+              </Col>
+              <Col span={4} style={{display:"flex" ,justifyContent:"center", alignItems:"center", padding:"12px",height:"88px", flexDirection:"column"}}>
+                <p><ProfileOutlined></ProfileOutlined> Number of People</p>
+                <Select style={{width:"145px"}} placeholder="Choose number"></Select>
+              </Col>
+              <Col span={4} style={{display:"flex" ,justifyContent:"center", alignItems:"center", padding:"12px",height:"88px", flexDirection:"column"}}>
+                <p><ProfileOutlined></ProfileOutlined> Number of People</p>
+                <Select style={{width:"145px"}} placeholder="Choose number"></Select>
+              </Col>
+              <Col span={4} style={{display:"flex" ,justifyContent:"center", alignItems:"center", padding:"12px",height:"88px", flexDirection:"column"}}>
+                <p><ProfileOutlined></ProfileOutlined> Number of People</p>
+                <Select style={{width:"145px"}} placeholder="Choose number"></Select>
+              </Col>
+              <Col span={4} style={{display:"flex" ,justifyContent:"center", alignItems:"center", height:"112px"}}>
+                <Button style={{height:"80px", width:"80px", background:"#A9B489", color:"white", borderRadius:"12px"}} icon={<SearchOutlined/>}></Button>
+              </Col>
+          </Row>
+      </div>
+              </div>
+          </div>
+    </div>
+    <div>
+      
+    </div>
       <div className="mx-[250px]">
         {/* hotel card*/}
         <div>
