@@ -120,7 +120,6 @@ export {
   patchRequest,
   postRequestParams,
   postRequestFormData,
-  putRequestFormData
+  putRequestFormData,
   postRequestMultipartFormData,
-  postRequestFormData
 };

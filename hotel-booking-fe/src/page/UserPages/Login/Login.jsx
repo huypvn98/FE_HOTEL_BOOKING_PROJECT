@@ -32,6 +32,7 @@ const Login = () => {
     dispatch(login({ username, password }))
     .then((res)=>{
       console.log(res)
+      localStorage.setItem("userID", res.payload.data.userInfo.userID)
       if(res.payload && res.payload.status === 200 && res.payload.data.userInfo.roles === "Admin"){
           navigate("admin")
       } else if (res.payload && res.payload.status === 200 && res.payload.data.userInfo.roles === "Customer"){
