@@ -9,8 +9,6 @@ import AdminLayout from "./layout/AdminLayout/AdminLayout.jsx";
 import Dashboard from "./page/AdminPages/Dashboard.jsx";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { testFunc } from "./redux/slices/testSlice.js";
-import { testData } from "./redux/selector.js";
 import RoomManagement from "./page/AdminPages/HotelManagement/OwnerManagement.jsx";
 import BookingDetail from "./page/AdminPages/BookingDetail/BookingDetail.jsx";
 import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx";
@@ -22,33 +20,35 @@ import UserProfile from "./page/UserPages/Profile/UserProfile.jsx";
 import { FloatButton } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import BookingCart from "./page/UserPages/BookingCart/BookingCart.jsx";
+import { ShoppingCartOutlined } from "@ant-design/icons"; // Import fetchUserDetails
+import HotelDetail from "./page/UserPages/RoomDetail/HotelDetail.jsx";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const data = useSelector(testData);
   const isAuthenticated = useSelector(
     (state) => state.authSlice?.isAuthenticated
   ); // Get isAuthenticated from the Redux store
-  console.log("check isAuthenticated", isAuthenticated);
+  const user = useSelector((state) => state.authSlice?.user); // Get user from the Redux store
   const pathname = location.pathname;
+  const isAdmin = user?.roles === "Admin";
+  const isCustomer = user?.roles === "Customer";
 
   useEffect(() => {
-    dispatch(testFunc());
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (isAuthenticated && (pathname === "/login" || pathname === "/signup")) {
-  //     navigate("/"); // Navigate to home if authenticated and on login/signup page
-  //   }
-  // }, [isAuthenticated, pathname, navigate]);
-
-  console.log("check data", data);
+    if (isAuthenticated) {
+      if (isAdmin && pathname === "/login") {
+        navigate("/admin/dashboard");
+      } else if (isCustomer && pathname === "/login") {
+        navigate("/");
+      } else if (pathname === "/login" || pathname === "/signup") {
+        navigate("/"); // Navigate to home if authenticated and on login/signup page
+      }
+    }
+  }, [isAuthenticated, user, pathname, navigate]);
 
   return (
     <>
-      {pathname.includes("/admin") ? (
+      {isAdmin ? (
         <AdminLayout>
           <Routes>
             <Route path="/admin/dashboard" element={<Dashboard />} />
@@ -70,6 +70,16 @@ function App() {
           </Routes>
         </AdminLayout>
       ) : (
+        <DefaultLayout isHomePage={pathname === "/"}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/test" element={<Test />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/hotel/detail/:id" element={<HotelDetail />} />
+            <Route path="/hotel" element={<HotelPage />} />
+            <Route path="/profile/:id" element={<UserProfile />} />
+          </Routes>
         <>
           <DefaultLayout isHomePage={pathname === "/"}>
             <Routes>
@@ -91,7 +101,7 @@ function App() {
             }}
             icon={<ShoppingCartOutlined />}
           />
-        </>
+        </DefaultLayout>
       )}
     </>
    

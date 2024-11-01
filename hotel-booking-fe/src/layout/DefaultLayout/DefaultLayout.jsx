@@ -1,6 +1,6 @@
 import { Layout, Menu, Select, Button, Dropdown, Avatar } from "antd";
 import React from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import "./DefaultLayout.css";
 import { logout } from "../../redux/slices/authSlice";
@@ -15,6 +15,7 @@ const DefaultLayout = ({ children, isHomePage }) => {
     (state) => state.authSlice?.isAuthenticated
   );
   const user = useSelector((state) => state.authSlice?.user);
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {

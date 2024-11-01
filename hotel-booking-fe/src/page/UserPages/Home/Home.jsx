@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import hotel from "../../../assets/caption.jpg";
 import hotlady from "../../../assets/stock-photo-traveler-tourist-woman-in-casual-clothes-hat-camera-point-thumb-finger-back-aside-on-workspace-area-2063722232-removebg-preview 1.png";
 import image from "../../../image/backgroundImage.jpg";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +22,7 @@ function Home() {
   const [location, setLocation] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { hotels, loading, error } = useSelector((state) => state.hotel);
+  const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
   const baseURL =
     "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
 

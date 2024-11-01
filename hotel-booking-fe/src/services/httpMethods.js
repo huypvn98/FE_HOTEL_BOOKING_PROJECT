@@ -88,7 +88,20 @@ const putRequest = async (url, payload) => {
   }
 };
 
-
+// [PUT] -> multipart/form-data (file, ...)
+const putRequestFormData = async (url, payload) => {
+  try {
+    const res = await axiosClientVer2.put(`${url}`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+// [PATCH]
 const patchRequest = async (url, payload) => {
   try {
     const res = await axiosClientVer2.patch(`${url}`, payload);
@@ -106,6 +119,8 @@ export {
   putRequest,
   patchRequest,
   postRequestParams,
+  postRequestFormData,
+  putRequestFormData
   postRequestMultipartFormData,
   postRequestFormData
 };
