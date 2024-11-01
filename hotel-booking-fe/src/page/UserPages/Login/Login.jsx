@@ -1,9 +1,4 @@
-import {
-  GoogleOutlined,
-  LockOutlined,
-  MailOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import React, { useState } from "react";
 import "./Login.css";
