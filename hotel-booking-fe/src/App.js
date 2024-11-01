@@ -19,6 +19,7 @@ import HotelPage from "./page/UserPages/HotelPage/Hotel.jsx";
 import UserProfile from "./page/UserPages/Profile/UserProfile.jsx";
 import { FloatButton } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons"; // Import fetchUserDetails
+import HotelDetail from "./page/UserPages/RoomDetail/HotelDetail.jsx";
 
 function App() {
   const location = useLocation();
@@ -75,6 +76,7 @@ function App() {
             <Route path="/test" element={<Test />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/hoteldetail" element={<HotelDetail />} />
             <Route path="/hotel" element={<HotelPage />} />
             <Route path="/profile/:id" element={<UserProfile />} />
           </Routes>
