@@ -17,6 +17,7 @@ import RoomManagement from "./page/AdminPages/HotelManagement/OwnerManagement.js
 import BookingDetail from "./page/AdminPages/BookingDetail/BookingDetail.jsx";
 import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx";
 import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagement.jsx";
+import RoomDetail from "./page/UserPages/RoomDetail/RoomDetail.jsx";
 
 function App() {
   const location = useLocation();
@@ -46,6 +47,7 @@ function App() {
           <Route path="/test" element={<Test />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+            <Route path="/roomdetail" element={<RoomDetail />} />
         </Routes>
       </DefaultLayout>
     )}
