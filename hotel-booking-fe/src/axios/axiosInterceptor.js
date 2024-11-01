@@ -51,7 +51,7 @@ axiosClientVer2.interceptors.response.use(
   async (error) => {
     console.log("🚀 ~ Response in Error (in axiosClientVer2):", error);
     if (error.response.status === 400) {
-      message.error(error.response.data.errorMessage);
+      message.error(error.response.data.message);
     }
     if (error.response.status === 409) {
       message.error(error.response.data.errorMessage);
