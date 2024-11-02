@@ -4,7 +4,7 @@ import { message } from "antd";
 
 const initialState = {
   data: null,
-  user: localStorage.getItem("user") || null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
   error: null,
   isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false, // Retrieve isAuthenticated from local storage// Add isAuthenticated to the initial state
@@ -70,8 +70,7 @@ export const login = createAsyncThunk(
         username,
         password,
       });
-      console.log(res)
-      return res; 
+      return res.data; // Assuming the response contains user data
     } catch (error) {
       // Check if the error response is available
       if (error.response && error.response.data) {

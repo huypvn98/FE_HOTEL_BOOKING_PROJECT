@@ -47,7 +47,7 @@ function HotelCard({ hotel }) {
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold text-[#a9b489]">$100/night</span>
+            <span className="text-xl font-bold text-[#a9b489]">$240/night</span>
             <span className="text-gray-500 text-base flex justify-end ">
               {" "}
               excl. tax
