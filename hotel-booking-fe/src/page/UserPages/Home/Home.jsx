@@ -22,7 +22,7 @@ function Home() {
   const [location, setLocation] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { hotels, loading, error } = useSelector((state) => state.hotel);
+  const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
   const baseURL =
     "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
 
@@ -32,13 +32,23 @@ function Home() {
 
   const handleCheckInChange = (date) => {
     setCheckInDate(date);
+    if (date) {
+      localStorage.setItem("checkInDate", date.format("YYYY-MM-DD"));
+    } else {
+      localStorage.removeItem("checkInDate");
+    }
     if (!date || !checkOutDate) {
       setNights(0);
     }
   };
-
+  
   const handleCheckOutChange = (date) => {
     setCheckOutDate(date);
+    if (date) {
+      localStorage.setItem("checkOutDate", date.format("YYYY-MM-DD"));
+    } else {
+      localStorage.removeItem("checkOutDate");
+    }
     if (!date || !checkInDate) {
       setNights(0);
     }
@@ -48,6 +58,7 @@ function Home() {
     if (checkInDate && checkOutDate) {
       const nightsCount = dayjs(checkOutDate).diff(dayjs(checkInDate), "day");
       setNights(nightsCount);
+      localStorage.setItem("nights", nightsCount);
     }
   }, [checkInDate, checkOutDate]);
 

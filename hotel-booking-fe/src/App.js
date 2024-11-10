@@ -14,37 +14,36 @@ import BookingDetail from "./page/AdminPages/BookingDetail/BookingDetail.jsx";
 import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx";
 import RefundManagement from "./page/AdminPages/RefundManagement/RefundManagement.jsx";
 import HotelRoomManagement from "./page/AdminPages/HotelRoomManagement/RoomManagement.jsx";
-import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
 import HotelPage from "./page/UserPages/HotelPage/Hotel.jsx";
 import UserProfile from "./page/UserPages/Profile/UserProfile.jsx";
 import { FloatButton } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons"; // Import fetchUserDetails
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import BookingCart from "./page/UserPages/BookingCart/BookingCart.jsx";
 import HotelDetail from "./page/UserPages/RoomDetail/HotelDetail.jsx";
+import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector(
     (state) => state.authSlice?.isAuthenticated
-  ); // Get isAuthenticated from the Redux store
-  const user = useSelector((state) => state.authSlice?.user); // Get user from the Redux store
+  );
+  const user = useSelector((state) => state.authSlice?.user);
   const pathname = location.pathname;
   const isAdmin = user?.roles === "Admin";
   const isCustomer = user?.roles === "Customer";
 
   useEffect(() => {
     if (isAuthenticated) {
-
       if (isAdmin && pathname === "/login") {
         navigate("/admin/dashboard");
       } else if (isCustomer && pathname === "/login") {
         navigate("/");
       } else if (pathname === "/login" || pathname === "/signup") {
-        navigate("/"); // Navigate to home if authenticated and on login/signup page
+        navigate("/");
       }
     }
   }, [isAuthenticated, user, pathname, navigate]);
-
 
   return (
     <>
@@ -52,20 +51,11 @@ function App() {
         <AdminLayout>
           <Routes>
             <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route
-              path="/admin/owner-management"
-              element={<RoomManagement />}
-            />
+            <Route path="/admin/owner-management" element={<RoomManagement />} />
             <Route path="/admin/booking-detail" element={<BookingDetail />} />
             <Route path="/admin/user-management" element={<UserManagement />} />
-            <Route
-              path="/admin/refund-management"
-              element={<RefundManagement />}
-            />
-            <Route
-              path="/admin/room-management"
-              element={<HotelRoomManagement />}
-            />
+            <Route path="/admin/refund-management" element={<RefundManagement />} />
+            <Route path="/admin/room-management" element={<HotelRoomManagement />} />
             <Route path="/admin/room-management/:id" element={<RoomDetail />} />
           </Routes>
         </AdminLayout>
@@ -76,15 +66,15 @@ function App() {
             <Route path="/test" element={<Test />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/hoteldetail" element={<HotelDetail />} />
+            <Route path="/hotel/detail/:id" element={<HotelDetail />} />
             <Route path="/hotel" element={<HotelPage />} />
+            <Route path="/roomdetail" element={<HotelDetail />} />
+            <Route path="/bookingcart/:id" element={<BookingCart />} />
             <Route path="/profile/:id" element={<UserProfile />} />
           </Routes>
           <FloatButton
             shape="circle"
-            badge={{
-              dot: true,
-            }}
+            badge={{ dot: true }}
             icon={<ShoppingCartOutlined />}
           />
         </DefaultLayout>

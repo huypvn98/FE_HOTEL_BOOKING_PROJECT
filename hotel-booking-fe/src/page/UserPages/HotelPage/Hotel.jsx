@@ -21,7 +21,7 @@ function HotelPage() {
   const query = useQuery();
   const location = query.get("location");
   const dispatch = useDispatch();
-  const { hotels, loading, error } = useSelector((state) => state.hotel);
+  const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
 
   useEffect(() => {
     dispatch(fetchHotels());

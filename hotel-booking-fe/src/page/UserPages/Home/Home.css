@@ -1,0 +1,32 @@
+.home-hero{
+    background-image: url("/src/image/backgroundImage.jpg");
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.date-container{
+    width: 1383px;
+height: 390px;
+
+}
+.date-picker-text{
+    color: white;
+
+}
+.date-picker{
+    height: 208px;
+    background: #FFFFFF33;
+    margin-top: 30px;
+    border-radius: 20px;
+}
+.date-picker-selects{
+    width:1343px;
+    height: 112px;
+    background: white;
+    margin-left: 20px;
+    border-radius: 0px 20px 20px 20px;
+}
