@@ -7,9 +7,10 @@ import {
   Radio,
   Row,
   Typography,
+  DatePicker,
 } from "antd";
-import { Apple, Facebook, Google, Instagram, Location } from "iconsax-react";
-import React from "react";
+import { Apple, Facebook, Google, Location } from "iconsax-react";
+import React, { useState, useEffect } from "react";
 import LeftLine from "../../../image/Line 5.png";
 import RightLine from "../../../image/Line 6.png";
 import Building from "../../../image/building.png";
@@ -18,23 +19,61 @@ import { MailOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBooking } from "../../../redux/slices/bookingSlice";
 import moment from "moment";
+import dayjs from "dayjs";
 
 const { Title, Text } = Typography;
+
 const BookingCart = () => {
   const user = useSelector((state) => state.authSlice?.user);
   const role = user?.roles;
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.BookingSlice?.loading);
 
-  const handleProceed = () => {
-    const checkInDate = localStorage.getItem("checkInDate");
-    const checkOutDate = localStorage.getItem("checkOutDate");
+  const [checkInDate, setCheckInDate] = useState(
+    localStorage.getItem("checkInDate")
+  );
+  const [checkOutDate, setCheckOutDate] = useState(
+    localStorage.getItem("checkOutDate")
+  );
+  const [nights, setNights] = useState(localStorage.getItem("nights"));
 
+  useEffect(() => {
+    if (checkInDate && checkOutDate) {
+      const nightsCount = moment(checkOutDate).diff(
+        moment(checkInDate),
+        "days"
+      );
+      setNights(nightsCount);
+      localStorage.setItem("nights", nightsCount);
+    }
+  }, [checkInDate, checkOutDate]);
+
+  const handleCheckInChange = (date) => {
+    const formattedDate = date ? date.format("YYYY-MM-DD") : null;
+    setCheckInDate(formattedDate);
+    localStorage.setItem("checkInDate", formattedDate);
+  };
+
+  const handleCheckOutChange = (date) => {
+    const formattedDate = date ? date.format("YYYY-MM-DD") : null;
+    setCheckOutDate(formattedDate);
+    localStorage.setItem("checkOutDate", formattedDate);
+  };
+
+  const handleClearDates = () => {
+    setCheckInDate(null);
+    setCheckOutDate(null);
+    setNights(null);
+    localStorage.removeItem("checkInDate");
+    localStorage.removeItem("checkOutDate");
+    localStorage.removeItem("nights");
+  };
+
+  const handleProceed = () => {
     const currentDate = new Date();
     const bookingDate = currentDate.toISOString().split("T")[0];
 
     const bookingPayload = {
-      // Add other necessary booking details here
       roomID: 8,
       customerID: user.userID,
       depositID: 1,
@@ -44,13 +83,11 @@ const BookingCart = () => {
       checkOutDate,
       bookingStatus: "pending",
       toDate: bookingDate,
+      nights,
     };
     dispatch(fetchBooking(bookingPayload));
   };
 
-  const checkInDate = localStorage.getItem("checkInDate");
-  const checkOutDate = localStorage.getItem("checkOutDate");
-  const nights = localStorage.getItem("nights");
   const formattedCheckInDate = checkInDate
     ? moment(checkInDate).format("dddd, MMM D")
     : "Select Check-in Date";
@@ -58,6 +95,9 @@ const BookingCart = () => {
     ? moment(checkOutDate).format("dddd, MMM D")
     : "Select Check-out Date";
 
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf("day");
+  };
 
   return (
     <div className="mt-[200px] px-28">
@@ -86,7 +126,8 @@ const BookingCart = () => {
                   <Row align={"middle"}>
                     <Location size="16" variant="Bold" />
                     <Text>
-                      Corem ipsum dolor sit amet, consectetur adipiscing elit.
+                      City Center, 15 & 15A, Connaught Rd, Modi Colony, Pune,
+                      Maharashtra 411001
                     </Text>
                   </Row>
                 </Col>
@@ -94,8 +135,18 @@ const BookingCart = () => {
             </Card>
             <Row className="mt-10 justify-around">
               <Col span={5}>
-              <Title level={5}>{formattedCheckInDate}</Title>
-                <Text type="secondary">Check-in</Text>
+                {checkInDate ? (
+                  <>
+                    <Title level={5}>{formattedCheckInDate}</Title>
+                    <Text type="secondary">Check-in</Text>
+                  </>
+                ) : (
+                  <DatePicker
+                    onChange={handleCheckInChange}
+                    placeholder="Select Check-in Date"
+                    disabledDate={disabledDate}
+                  />
+                )}
               </Col>
               <Col span={5}>
                 <Row className="justify-around" align="middle">
@@ -105,16 +156,31 @@ const BookingCart = () => {
                 </Row>
               </Col>
               <Col span={5}>
-              <Title level={5}>{formattedCheckOutDate}</Title>
-                <Text type="secondary">Check-out</Text>
+                {checkOutDate ? (
+                  <>
+                    <Title level={5}>{formattedCheckOutDate}</Title>
+                    <Text type="secondary">Check-out</Text>
+                  </>
+                ) : (
+                  <DatePicker
+                    onChange={handleCheckOutChange}
+                    placeholder="Select Check-out Date"
+                    disabledDate={disabledDate}
+                  />
+                )}
               </Col>
             </Row>
             <div
-              className="mt-6 flex w-[80px] py-1 px-3"
+              className="mt-6 flex w-[80px] py-1 px-3 justify-center items-center"
               style={{ borderRadius: "15px", border: "1px solid #A1A1A1" }}
             >
-              {nights} Night{nights !== "1" ? "s" : ""}
+              {nights
+                ? `${nights} Night${nights !== "1" ? "s" : ""}`
+                : "0 night"}
             </div>
+            <Button onClick={handleClearDates} className="mt-4">
+              Clear Dates
+            </Button>
           </Card>
 
           <Card className="mt-10 ">
@@ -201,7 +267,7 @@ const BookingCart = () => {
                 <Row className="gap-1">
                   <div
                     className="rounded w-5 px-4 py-2 flex justify-center align-middle"
-                    style={{ border: "1px solid var(--Mint-Green, #8DD3BB)" }}
+                    style={{ border: "1px solid var(--Mint-Green, #a9b489)" }}
                   >
                     4.2
                   </div>
@@ -213,19 +279,12 @@ const BookingCart = () => {
               </Col>
             </Row>
             <Divider></Divider>
-            <Text>
-              Your booking is protected by{" "}
-              <span>
-                <Text strong>PhonePe</Text>
-              </span>{" "}
-            </Text>
-            <Divider></Divider>
             <Text strong>Price Details</Text>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Base Fare</Text>
               <Text strong>$240</Text>
             </Row>
-            <Row className="mt-4" justify={"space-between"}>
+            {/* <Row className="mt-4" justify={"space-between"}>
               <Text>Discount</Text>
               <Text strong>$0</Text>
             </Row>
@@ -236,11 +295,11 @@ const BookingCart = () => {
             <Row className="mt-4" justify={"space-between"}>
               <Text>Service Fee</Text>
               <Text strong>$2</Text>
-            </Row>
+            </Row> */}
             <Divider></Divider>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Total</Text>
-              <Text strong>$265</Text>
+              <Text strong>$240</Text>
             </Row>
           </Card>
         </Col>

@@ -182,11 +182,6 @@ const HotelDetail = () => {
               icon={<ShareAltOutlined />}
               className="icon-button"
             />
-            <Button
-              style={{ background: "#a9b489", border: "none", color: "white" }}
-            >
-              Book Now
-            </Button>
           </div>
         </div>
       </div>
@@ -326,7 +321,7 @@ const HotelDetail = () => {
       </div>
 
       {/* Location Map */}
-      <div className="bg-white rounded-lg shadow-md mb-6">
+      {/* <div className="bg-white rounded-lg shadow-md mb-6">
         <h2 className="text-xl font-bold p-6 border-b">
           Location/Map
           <div className="flex justify-end">
@@ -347,7 +342,7 @@ const HotelDetail = () => {
             Map placeholder
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Detailed Amenities Section */}
       <div className="bg-white rounded-lg shadow-md mb-6">

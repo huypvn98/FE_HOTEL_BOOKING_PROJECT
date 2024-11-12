@@ -41,7 +41,7 @@ function Home() {
       setNights(0);
     }
   };
-  
+
   const handleCheckOutChange = (date) => {
     setCheckOutDate(date);
     if (date) {
@@ -107,7 +107,6 @@ function Home() {
   ];
 
   const disabledDate = (current) => {
-    // Can not select days before today
     return current && current < dayjs().startOf("day");
   };
 
