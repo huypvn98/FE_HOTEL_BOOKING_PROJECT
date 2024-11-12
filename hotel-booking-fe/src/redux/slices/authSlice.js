@@ -4,7 +4,7 @@ import { message } from "antd";
 
 const initialState = {
   data: null,
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
   error: null,
   isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false, // Retrieve isAuthenticated from local storage// Add isAuthenticated to the initial state
@@ -18,15 +18,21 @@ export const authSlice = createSlice({
       state.user = null;
       state.error = null;
       state.isAuthenticated = false;
+      localStorage.removeItem("user"); 
       localStorage.setItem("isAuthenticated", false);
       message.info("You have loggout"); // Reset isAuthenticated on logout
+    },
+    updateUserInfo: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; // Assuming the payload contains user data
+        state.user = action.payload.userInfo; // Assuming the payload contains user data
+        localStorage.setItem("user", JSON.stringify(action.payload.userInfo));
         state.isAuthenticated = true; // Set isAuthenticated to true on successful login
         localStorage.setItem("isAuthenticated", true);
         message.success("You have successfully logged in.");
@@ -96,5 +102,5 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const { logout } = authSlice.actions;
+export const { logout , updateUserInfo} = authSlice.actions;
 export default authSlice; // Export the reducer, not the slice itself

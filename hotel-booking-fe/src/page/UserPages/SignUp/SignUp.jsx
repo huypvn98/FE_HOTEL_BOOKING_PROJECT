@@ -2,7 +2,6 @@ import React from "react";
 import "./SignUp.css";
 import { Button, Checkbox, Form, Input, Select } from "antd";
 import {
-  GoogleOutlined,
   LockOutlined,
   MailOutlined,
   UserOutlined,
@@ -196,7 +195,7 @@ const SignUp = () => {
             <Button
               size="large"
               block
-              icon={<img src={googleIcon} style={{ width: "20px" }} />}
+              icon={<img src={googleIcon} alt="" style={{ width: "20px" }} />}
               style={{
                 backgroundColor: "#fff",
                 color: "#000",

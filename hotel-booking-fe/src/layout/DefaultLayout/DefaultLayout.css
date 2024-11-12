@@ -21,24 +21,43 @@
     color: #ddd !important;
     overflow: visible;
 }
-.footer{
 
-    height:648px;
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+.content {
+    flex: 1;
+  }
+
+/* Footer styles */
+.footer {
+    height: 648px;
     background: #333333;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.footer-content{
+  }
+  .footer-content {
     width: 1419px;
     height: 340px;
     padding-block: 33px;
     border-block: 1px solid #5f5c5c;
     display: flex;
     gap: 93px;
-}
-.vertical{
+  }
+  .vertical {
     display: flex;
     flex-direction: column;
-    gap:10px
+    gap: 10px;
+  }
+
+  .home-header .ant-menu .ant-menu-title-content {
+    color: #fff;
+}
+
+.home-login-button {
+  color: black;
 }
