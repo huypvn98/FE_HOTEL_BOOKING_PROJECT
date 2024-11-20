@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "userName": "John Doe",
+    "avatar": "https://example.com/avatar1.jpg",
+    "rating": 5,
+    "comment": "Amazing booking experience! Everything was smooth and hassle-free.",
+    "email": "john.doe@example.com"
+  },
+  {
+    "id": 2,
+    "userName": "Jane Smith",
+    "avatar": "https://example.com/avatar2.jpg",
+    "rating": 5,
+    "comment": "Excellent service! The booking process was quick and easy.",
+    "email": "jane.smith@example.com"
+  },
+  {
+    "id": 3,
+    "userName": "Alice Johnson",
+    "avatar": "https://example.com/avatar3.jpg",
+    "rating": 5,
+    "comment": "Fantastic experience! I highly recommend this service.",
+    "email": "alice.johnson@example.com"
+  },
+  {
+    "id": 4,
+    "userName": "Bob Brown",
+    "avatar": "https://example.com/avatar4.jpg",
+    "rating": 5,
+    "comment": "Great booking experience! Everything was well-organized.",
+    "email": "bob.brown@example.com"
+  },
+  {
+    "id": 5,
+    "userName": "Charlie Davis",
+    "avatar": "https://example.com/avatar5.jpg",
+    "rating": 5,
+    "comment": "Superb service! The booking process was seamless.",
+    "email": "charlie.davis@example.com"
+  },
+  {
+    "id": 6,
+    "userName": "Emily Wilson",
+    "avatar": "https://example.com/avatar6.jpg",
+    "rating": 4,
+    "comment": "Good experience overall, but there were a few minor issues.",
+    "email": "emily.wilson@example.com"
+  },
+  {
+    "id": 7,
+    "userName": "Frank Miller",
+    "avatar": "https://example.com/avatar7.jpg",
+    "rating": 4,
+    "comment": "The booking process was good, but there is room for improvement.",
+    "email": "frank.miller@example.com"
+  },
+  {
+    "id": 8,
+    "userName": "Grace Lee",
+    "avatar": "https://example.com/avatar8.jpg",
+    "rating": 3,
+    "comment": "Average experience. The booking process could be better.",
+    "email": "grace.lee@example.com"
+  },
+  {
+    "id": 9,
+    "userName": "Henry Clark",
+    "avatar": "https://example.com/avatar9.jpg",
+    "rating": 3,
+    "comment": "The booking process was okay, but there were some issues.",
+    "email": "henry.clark@example.com"
+  },
+  {
+    "id": 10,
+    "userName": "Isabella Martinez",
+    "avatar": "https://example.com/avatar10.jpg",
+    "rating": 3,
+    "comment": "Not the best experience. The booking process needs improvement.",
+    "email": "isabella.martinez@example.com"
+  }
+]

@@ -39,6 +39,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
   }
   .footer-content {
     width: 1419px;
@@ -46,7 +47,7 @@
     padding-block: 33px;
     border-block: 1px solid #5f5c5c;
     display: flex;
-    gap: 93px;
+    gap: 60px;
   }
   .vertical {
     display: flex;
