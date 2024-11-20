@@ -6,8 +6,9 @@ import "./HotelDetail.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { fetchHotelDetail } from "../../../redux/slices/hotelSlice";
-import { hotelDetail } from "../../../redux/selector";
+import { hotelDetail, roomsByHotel } from "../../../redux/selector";
 import { images } from "./imagesData";
+import { fetchAllRoom, fetchRoomByHotel } from "../../../redux/slices/roomSlice";
 
 const HotelDetail = () => {
   const navigate = useNavigate()
@@ -136,9 +137,12 @@ const HotelDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const hotel = useSelector(hotelDetail);
+  const roomsById = useSelector(roomsByHotel);
 
   useEffect(() => {
+    dispatch(fetchAllRoom())
     dispatch(fetchHotelDetail(id));
+    dispatch(fetchRoomByHotel(id))
   }, [dispatch, id]);
 
   console.log("Hotel ID:", id);
@@ -148,7 +152,7 @@ const HotelDetail = () => {
 
   // Add a check to handle the case when hotel data is not yet loaded
   //if (!hotel) return <div>No hotel data available</div>;
-
+console.log(roomsById)
   return (
     <div style={{ marginTop: "100px" }} className="max-w-6xl mx-auto p-4">
       {/* Header */}
