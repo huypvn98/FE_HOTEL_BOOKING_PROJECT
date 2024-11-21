@@ -41,7 +41,7 @@ function Home() {
       setNights(0);
     }
   };
-  
+
   const handleCheckOutChange = (date) => {
     setCheckOutDate(date);
     if (date) {
@@ -107,7 +107,6 @@ function Home() {
   ];
 
   const disabledDate = (current) => {
-    // Can not select days before today
     return current && current < dayjs().startOf("day");
   };
 
@@ -301,22 +300,23 @@ function Home() {
             <img className="h-full w-auto" src={hotlady} />
           </div>
           <div className="mx-[250px] my-[60px] flex flex-row justify-between items-center h-full">
-            <div className="bg-[#FFFFFF4D] rounded-[24px] w-[569px] h-[330px] my-[60px] p-[30px]">
+            <div className="bg-[#FFFFFF4D] rounded-[24px] w-[569px] h-[330px] py-[60px] p-[30px]">
               <div className="flex flex-col items-center justify-center space-y-8">
                 <h1 className="font-sans font-extrabold text-[32px] leading-[43.58px] text-center">
-                  Get Special Offers for Organizations
+                  Get in Touch with Us
                 </h1>
                 <p className="font-sans font-normal text-[18px] leading-[26px] text-center">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s
+                  We'd love to hear from you! Please fill out the form below,
+                  and we'll get back to you as soon as possible.
                 </p>
-                <Button
-                  className="rounded-[50px] w-[212px] h-[47px] text-white"
-                  style={{ backgroundColor: "#A9B489" }}
-                >
-                  Contact Us
-                </Button>
+                <Link to="/contact">
+                  <Button
+                    className="rounded-[50px] w-[212px] h-[47px] text-white"
+                    style={{ backgroundColor: "#A9B489" }}
+                  >
+                    Contact Us
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

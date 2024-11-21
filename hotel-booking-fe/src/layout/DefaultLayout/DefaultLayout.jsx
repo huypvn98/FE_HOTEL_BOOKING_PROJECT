@@ -1,10 +1,16 @@
 import { Layout, Menu, Select, Button, Dropdown, Avatar } from "antd";
-import React from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import "./DefaultLayout.css";
 import { logout } from "../../redux/slices/authSlice";
-import { MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  FacebookOutlined,
+  InstagramOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 const { Content } = Layout;
 const { Item } = Menu;
@@ -15,8 +21,13 @@ const DefaultLayout = ({ children, isHomePage }) => {
     (state) => state.authSlice?.isAuthenticated
   );
   const user = useSelector((state) => state.authSlice?.user);
-  
   const navigate = useNavigate();
+  const location = useLocation();
+  const [current, setCurrent] = useState(location.pathname);
+
+  useEffect(() => {
+    setCurrent(location.pathname);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -39,70 +50,76 @@ const DefaultLayout = ({ children, isHomePage }) => {
   return (
     <Layout className="layout">
       <header className={`header ${isHomePage ? "home-header" : ""}`}>
-        <div className="flex w-[400px]">
-          <Menu className="header-menu w-[518px], h-[47px]" mode="horizontal">
-            <Item key="home">
-              <Link to="/">Home</Link>
-            </Item>
-            <Item key="about">About Us</Item>
-            <Item key="tour">Tour Package</Item>
-            <Item key="contact">Contact Us</Item>
-          </Menu>
-          <div className="header-function ml-[167px] flex">
-            <Select className="w-[80px] h-[47px]" placeholder="Eng"></Select>
-            {isAuthenticated ? (
-              <Dropdown overlay={menu} trigger={["click"]}>
-                <div className="flex items-center cursor-pointer">
-                  <Avatar
-                    src={
-                      user && user.urlImage
-                        ? `${baseURL}${user.urlImage}`
-                        : null
-                    }
-                    alt={user ? user.username : "User"}
-                    icon={!user || !user.urlImage ? <UserOutlined /> : null}
-                  />
-                  <span
-                    className={`ml-2 font-semibold text-lg ${isHomePage ? "ml-2 text-white font-semibold text-lg" : ""}`}
-                  >
-                    {user?.username}
-                  </span>
-                </div>
-              </Dropdown>
-            ) : (
-              <>
-                <Button
-                  className={`login-button w-[77px] h-[47px] ${
-                    isHomePage ? "home-login-button" : ""
+        <Menu
+          className="header-menu"
+          mode="horizontal"
+          selectedKeys={[current]}
+          onClick={(e) => setCurrent(e.key)}
+        >
+          <Item key="/">
+            <Link to="/">Home</Link>
+          </Item>
+          <Item key="/about">
+            <Link to="/about">About Us</Link>
+          </Item>
+          <Item key="/contact">
+            <Link to="/contact">Contact Us</Link>
+          </Item>
+        </Menu>
+        <div className="header-function flex flex-row space-x-2">
+          <Select className="w-[80px] h-[47px]" placeholder="Eng"></Select>
+          {isAuthenticated ? (
+            <Dropdown overlay={menu} trigger={["click"]}>
+              <div className="flex items-center cursor-pointer">
+                <Avatar
+                  src={
+                    user && user.urlImage ? `${baseURL}${user.urlImage}` : null
+                  }
+                  alt={user ? user.username : "User"}
+                  icon={!user || !user.urlImage ? <UserOutlined /> : null}
+                />
+                <span
+                  className={`ml-2 font-semibold text-lg ${
+                    isHomePage ? "ml-2 text-white font-semibold text-lg" : ""
                   }`}
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "0px",
-                    boxShadow: "none",
-                  }}
-                  onClick={() => {
-                    navigate("/login");
-                  }}
                 >
-                  Login
-                </Button>
-                <Button
-                  className="signup-button w-[168px] h-[47px]"
-                  style={{
-                    backgroundColor: "#A9B489",
-                    borderRadius: "50px",
-                    boxShadow: "none",
-                    color: "white",
-                  }}
-                  onClick={() => {
-                    navigate("/signup");
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
-          </div>
+                  {user?.username}
+                </span>
+              </div>
+            </Dropdown>
+          ) : (
+            <>
+              <Button
+                className={`login-button w-[77px] h-[47px] ${
+                  isHomePage ? "home-login-button" : ""
+                }`}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "0px",
+                  boxShadow: "none",
+                }}
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                Login
+              </Button>
+              <Button
+                className="signup-button w-[168px] h-[47px]"
+                style={{
+                  backgroundColor: "#A9B489",
+                  borderRadius: "50px",
+                  boxShadow: "none",
+                  color: "white",
+                }}
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </div>
       </header>
       <Content
@@ -117,64 +134,79 @@ const DefaultLayout = ({ children, isHomePage }) => {
         <div className="footer-content">
           <div className="vertical">
             <p className="text-white font-extrabold mb-[10px] text-[20px]">
+              About Us
+            </p>
+            <p className="text-white font-semibold text-[16px]">
+              This is a startup project for the Exe201 subject of the EasyStay
+              group.
+            </p>
+          </div>
+          <div className="vertical">
+            <p className="text-white font-extrabold mb-[10px] text-[20px]">
               Services
             </p>
-            <p className="text-white font-semibold text-[18px]">
-              Bike and Rickshaw rental
+            <p className="text-white font-semibold text-[16px]">
+              Hotel Booking
             </p>
-            <p className="text-white font-semibold text-[18px]">
-              Guided Tours of Lucca
-            </p>
-            <p className="text-white font-semibold text-[18px]">
-              Guided Bike Tour of Lucca
-            </p>
-            <p className="text-white font-semibold text-[18px]">
-              Trip In The Tuscan Hills
-            </p>
-            <p className="text-white font-semibold text-[18px]">
-              Transportation With Luxury Cars
-            </p>
-            <p className="text-white font-semibold text-[18px]">
-              Wine Tours By Bus With Guide
-            </p>
+            <p className="text-white font-semibold text-[16px]">Tour Booking</p>
           </div>
           <div className="vertical">
             <p className="text-white font-extrabold mb-[10px] text-[20px]">
               Home
             </p>
-            <p className="text-white font-semibold text-[18px]"> Home</p>
-            <p className="text-white font-semibold text-[18px]">About Us</p>
-            <p className="text-white font-semibold text-[18px]">
-              Tour Packages
+            <p className="text-white font-semibold text-[16px]">
+              <Link to="/">Home</Link>
+            </p>
+            <p className="text-white font-semibold text-[16px]">
+              <Link to="/about">About Us</Link>
             </p>
           </div>
           <div className="vertical">
             <p className="text-white font-extrabold mb-[10px] text-[20px]">
               Help
             </p>
-            <p className="text-white font-semibold text-[18px]">Terms of Use</p>
-            <p className="text-white font-semibold text-[18px]">
-              Provicy Policy
+            <p className="text-white font-semibold text-[16px]">
+              <Link to="/termOfUse">Terms of Use</Link>
+            </p>
+            <p className="text-white font-semibold text-[16px]">
+             <Link to="/privacy">Privacy Policy</Link>
             </p>
           </div>
           <div className="vertical">
             <p className="text-white font-extrabold mb-[10px] text-[20px]">
               Contacts
             </p>
-            <p className="text-white font-semibold text-[18px]">
-              Piazza Napoleone, Lucca, Tuscany
+            <p className="text-white font-semibold text-[16px]">
+              Thanh Blue, Nhat Anh, Thanh Binh
             </p>
-            <p className="text-white font-semibold text-[18px]">
+            <p className="text-white font-semibold text-[16px] space-x-2 flex flex-row">
               {" "}
-              <PhoneOutlined className="text-[#A9B489]" /> +39 346 368 5708
+              <PhoneOutlined className="text-[#A9B489]" /> <p>0942557312</p>
             </p>
-            <p className="text-white font-semibold text-[18px]">
-              <MailOutlined className="text-[#A9B489]" /> italiainlimo@gmail.com
+            <p className="text-white font-semibold text-[18px] space-x-2 flex flex-row">
+              <MailOutlined className="text-[#A9B489]" />{" "}
+              <p>bintri92@gmail.com</p>
             </p>
           </div>
           <div className="vertical">
             <p className="text-white font-extrabold mb-[10px] text-[20px]">
               Social Media
+            </p>
+            <p className="text-white font-semibold text-[16px] space-x-2 flex flex-row">
+              <FacebookOutlined className="text-[#A9B489]" />
+              <Link
+                to="https://www.facebook.com/profile.php?id=61565933532280"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FaceBook
+              </Link>
+            </p>
+            <p className="text-white font-semibold text-[16px] space-x-2 flex flex-row">
+              <InstagramOutlined className="text-[#A9B489]" />
+              <Link to="https://www.instagram.com/easy_stay24/" target="_blank">
+                <p>Instagram</p>
+              </Link>
             </p>
           </div>
         </div>

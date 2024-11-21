@@ -8,7 +8,7 @@ import SignUp from "./page/UserPages/SignUp/SignUp.jsx";
 import AdminLayout from "./layout/AdminLayout/AdminLayout.jsx";
 import Dashboard from "./page/AdminPages/Dashboard.jsx";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import RoomManagement from "./page/AdminPages/HotelManagement/OwnerManagement.jsx";
 import BookingDetail from "./page/AdminPages/BookingDetail/BookingDetail.jsx";
 import UserManagement from "./page/AdminPages/UserManagement/UserManagement.jsx";
@@ -21,6 +21,10 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import BookingCart from "./page/UserPages/BookingCart/BookingCart.jsx";
 import HotelDetail from "./page/UserPages/RoomDetail/HotelDetail.jsx";
 import RoomDetail from "./page/AdminPages/HotelRoomManagement/RoomDetail.jsx";
+import ContactPage from "./page/UserPages/Contact/Contact.jsx";
+import About from "./page/UserPages/About Us/About.jsx";
+import TermsOfUse from "./page/UserPages/TermsofUse/TermOfUse.jsx";
+import PrivacyPolicy from "./page/UserPages/Privacy/Privacy.jsx";
 
 function App() {
   const location = useLocation();
@@ -51,11 +55,20 @@ function App() {
         <AdminLayout>
           <Routes>
             <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/owner-management" element={<RoomManagement />} />
+            <Route
+              path="/admin/owner-management"
+              element={<RoomManagement />}
+            />
             <Route path="/admin/booking-detail" element={<BookingDetail />} />
             <Route path="/admin/user-management" element={<UserManagement />} />
-            <Route path="/admin/refund-management" element={<RefundManagement />} />
-            <Route path="/admin/room-management" element={<HotelRoomManagement />} />
+            <Route
+              path="/admin/refund-management"
+              element={<RefundManagement />}
+            />
+            <Route
+              path="/admin/room-management"
+              element={<HotelRoomManagement />}
+            />
             <Route path="/admin/room-management/:id" element={<RoomDetail />} />
           </Routes>
         </AdminLayout>
@@ -71,6 +84,10 @@ function App() {
             <Route path="/roomdetail" element={<HotelDetail />} />
             <Route path="/bookingcart/:id" element={<BookingCart />} />
             <Route path="/profile/:id" element={<UserProfile />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/termOfUse" element={<TermsOfUse />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
           </Routes>
           <FloatButton
             shape="circle"
