@@ -13,6 +13,7 @@ import image from "../../../image/backgroundImage.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHotels } from "../../../redux/slices/hotelSlice";
 import { MagnifyingGlass } from "react-loader-spinner";
+import CustomerComment from "./CustomerComment";
 
 function Home() {
   const [checkInDate, setCheckInDate] = useState(null);
@@ -20,6 +21,8 @@ function Home() {
   const [nights, setNights] = useState(0);
   const [room, setRoom] = useState(null);
   const [location, setLocation] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const hotelsPerPage = 4;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
@@ -110,6 +113,23 @@ function Home() {
     return current && current < dayjs().startOf("day");
   };
 
+  const totalPages = Math.ceil(hotels.length / hotelsPerPage);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * hotelsPerPage;
+  const currentHotels = hotels.slice(startIndex, startIndex + hotelsPerPage);
+
   return (
     <div>
       <img
@@ -182,7 +202,7 @@ function Home() {
           <div className="mt-[180px]">
             <div className="flex flex-row justify-between">
               <p className="font-sans font-extrabold text-2xl leading-[43.58px] items-center">
-                Explore Our Popular Hotel{" "}
+                Explore Our Popular Hotel
               </p>
               <div className="flex flex-row space-x-6 items-center">
                 <Button
@@ -193,6 +213,8 @@ function Home() {
                     backgroundColor: "#EFEFEF",
                     borderColor: "#EFEFEF",
                   }}
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
                 >
                   <LeftOutlined />
                 </Button>
@@ -204,6 +226,8 @@ function Home() {
                     backgroundColor: "#A9B489",
                     borderColor: "#A9B489",
                   }}
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
                   icon={<RightOutlined style={{ color: "white" }} />}
                 />
               </div>
@@ -226,9 +250,12 @@ function Home() {
                 <p>Error: {error}</p>
               ) : (
                 Array.isArray(hotels) &&
-                hotels.map((hotel) => (
-                  <Link to={`/hotel/detail/${hotel.hotelID}`}>
-                    <div key={hotel.hotelID} className="space-y-4">
+                currentHotels.map((hotel) => (
+                  <Link
+                    to={`/hotel/detail/${hotel.hotelID}`}
+                    key={hotel.hotelID}
+                  >
+                    <div className="space-y-4">
                       <div>
                         <img
                           alt="hotel"
@@ -342,104 +369,7 @@ function Home() {
         </div>
 
         {/* customer comment */}
-        <div className="mx-[250px] mt-[120px]">
-          <div className="flex flex-row justify-between">
-            <p className="font-sans font-extrabold text-2xl leading-[43.58px] items-center">
-              Happy Customers Says
-            </p>
-            <div className="flex flex-row space-x-6 items-center">
-              <Button
-                shape="round"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: "#EFEFEF",
-                  borderColor: "#EFEFEF",
-                }}
-              >
-                <LeftOutlined />
-              </Button>
-              <Button
-                shape="round"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: "#A9B489",
-                  borderColor: "#A9B489",
-                }}
-                icon={<RightOutlined style={{ color: "white" }} />}
-              />
-            </div>
-          </div>
-          <div className="mt-[60px] flex flex-row justify-between space-x-5">
-            <div className="flex flex-col items-center p-8 text-lg bg-white rounded-3xl border border-solid border-zinc-100 max-w-[700px] text-zinc-800 max-md:px-5">
-              <div className="flex flex-col items-center text-center">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/b06437acd2e45220176cc291190095560c5497b4fdb0f4e4dd86b11bfbba86ef?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325"
-                  alt="Lyod Gomez's profile picture"
-                  className="object-contain w-20 rounded-full aspect-square"
-                />
-                <div className="mt-4">Lyod Gomez</div>
-              </div>
-              <div className="flex flex-col w-full leading-8">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/1ff38c6cffce93483a99a973d89a8366415b2cfb8f6b4e540a3afc7a5288b5b3?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325"
-                  alt=""
-                  className="object-contain w-10 aspect-[1.43]"
-                />
-                <div className="self-center mt-2.5 max-md:max-w-full">
-                  But I must explain to you how all this mistaken idea of
-                  denouncing pleasure and praising pain was born and I will give
-                  you a complete account of the system, and expound the actual
-                  teachings of the great explorer of the truth, the
-                  master-builder of human happiness. No one rejects, dislikes,
-                  or avoids pleasure itself, because it is pleasure
-                </div>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/1ff38c6cffce93483a99a973d89a8366415b2cfb8f6b4e540a3afc7a5288b5b3?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325"
-                  alt=""
-                  className="object-contain self-end mt-6 w-10 aspect-[1.43]"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col items-center p-8 text-lg bg-white rounded-3xl border border-solid border-zinc-100 max-w-[700px] text-zinc-800 max-md:px-5">
-              <div className="flex flex-col items-center text-center">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/b06437acd2e45220176cc291190095560c5497b4fdb0f4e4dd86b11bfbba86ef?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325"
-                  alt="Lyod Gomez's profile picture"
-                  className="object-contain w-20 rounded-full aspect-square"
-                />
-                <div className="mt-4">Lyod Gomez</div>
-              </div>
-              <div className="flex flex-col w-full leading-8">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/1ff38c6cffce93483a99a973d89a8366415b2cfb8f6b4e540a3afc7a5288b5b3?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325"
-                  alt=""
-                  className="object-contain w-10 aspect-[1.43]"
-                />
-                <div className="self-center mt-2.5 max-md:max-w-full">
-                  But I must explain to you how all this mistaken idea of
-                  denouncing pleasure and praising pain was born and I will give
-                  you a complete account of the system, and expound the actual
-                  teachings of the great explorer of the truth, the
-                  master-builder of human happiness. No one rejects, dislikes,
-                  or avoids pleasure itself, because it is pleasure
-                </div>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/1ff38c6cffce93483a99a973d89a8366415b2cfb8f6b4e540a3afc7a5288b5b3?placeholderIfAbsent=true&apiKey=0ee0a0b32dce4afba66955d45de6e325"
-                  alt=""
-                  className="object-contain self-end mt-6 w-10 aspect-[1.43]"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <CustomerComment />
       </div>
     </div>
   );

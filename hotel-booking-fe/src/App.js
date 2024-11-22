@@ -25,6 +25,8 @@ import ContactPage from "./page/UserPages/Contact/Contact.jsx";
 import About from "./page/UserPages/About Us/About.jsx";
 import TermsOfUse from "./page/UserPages/TermsofUse/TermOfUse.jsx";
 import PrivacyPolicy from "./page/UserPages/Privacy/Privacy.jsx";
+import Comment from "./page/AdminPages/CommentManagement/Comment.jsx";
+
 
 function App() {
   const location = useLocation();
@@ -70,6 +72,7 @@ function App() {
               element={<HotelRoomManagement />}
             />
             <Route path="/admin/room-management/:id" element={<RoomDetail />} />
+            <Route path="/admin/review-management" element={<Comment />} />
           </Routes>
         </AdminLayout>
       ) : (
