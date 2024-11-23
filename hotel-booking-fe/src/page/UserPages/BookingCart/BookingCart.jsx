@@ -74,8 +74,9 @@ const BookingCart = () => {
     const bookingDate = currentDate.toISOString().split("T")[0];
 
     const bookingPayload = {
-      roomID: 8,
-      customerID: user.userID,
+      roomID: 7,
+      userID: user.userID,
+      contactID:user.userID,
       depositID: 1,
       bookingDate,
       fromDate: checkInDate,
@@ -83,7 +84,7 @@ const BookingCart = () => {
       checkOutDate,
       bookingStatus: "pending",
       toDate: bookingDate,
-      nights,
+      note:"test"
     };
     dispatch(fetchBooking(bookingPayload));
   };
