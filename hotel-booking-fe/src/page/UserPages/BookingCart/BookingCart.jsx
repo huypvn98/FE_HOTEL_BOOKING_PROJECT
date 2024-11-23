@@ -82,9 +82,9 @@ const BookingCart = () => {
       fromDate: checkInDate,
       checkInDate,
       checkOutDate,
-      bookingStatus: "pending",
+      bookingStatus: "da thanh toan",
       toDate: bookingDate,
-      note:"test"
+      note:"da thanh toan truoc"
     };
     dispatch(fetchBooking(bookingPayload));
   };
