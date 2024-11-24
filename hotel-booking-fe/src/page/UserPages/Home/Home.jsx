@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, DatePicker, Input, Select } from "antd";
+import { Button, DatePicker, Input, message, Select } from "antd";
 import {
   LeftOutlined,
   RightOutlined,
@@ -66,15 +66,21 @@ function Home() {
   }, [checkInDate, checkOutDate]);
 
   const handleSearch = () => {
-    const queryParams = new URLSearchParams({
-      location,
-      checkInDate: checkInDate ? checkInDate.format("YYYY-MM-DD") : "",
-      checkOutDate: checkOutDate ? checkOutDate.format("YYYY-MM-DD") : "",
-      nights,
-      roomValue: room ? room.value : "",
-      roomLabel: room ? room.label : "",
-    }).toString();
-    navigate(`/hotel?${queryParams}`);
+    if(checkInDate === null || checkOutDate === null){
+      message.error("Need to pick check-in and check-out date")
+    }
+    else{
+      const queryParams = new URLSearchParams({
+        location,
+        checkInDate: checkInDate ? checkInDate.format("YYYY-MM-DD") : "",
+        checkOutDate: checkOutDate ? checkOutDate.format("YYYY-MM-DD") : "",
+        nights,
+        roomValue: room ? room.value : "",
+        roomLabel: room ? room.label : "",
+      }).toString();
+      navigate(`/hotel?${queryParams}`);
+    }
+
   };
 
   const data = [

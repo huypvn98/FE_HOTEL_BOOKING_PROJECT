@@ -26,7 +26,6 @@ function HotelPage() {
   useEffect(() => {
     dispatch(fetchHotels());
   }, [dispatch]);
-
   useEffect(() => {
     const checkIn = query.get("checkInDate");
     const checkOut = query.get("checkOutDate");
@@ -66,7 +65,6 @@ function HotelPage() {
     // Can not select days before today
     return current && current < dayjs().startOf("day");
   };
-
   const data = [
     {
       value: 1,
