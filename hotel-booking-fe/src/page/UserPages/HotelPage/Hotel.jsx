@@ -36,6 +36,7 @@ function HotelPage() {
 
   const [location, setLocation] = useState("");
   const [filteredHotels, setFilteredHotels] = useState([]);
+  const [selectedBedID, setSelectedBedID] = useState(null); // To track the selected bedID
 
   // Extract min and max price per night
 
@@ -84,15 +85,11 @@ function HotelPage() {
   const data = [
     {
       value: 1,
-      label: "1 room, 2 guests",
+      label: "Single Bedded",
     },
     {
       value: 2,
-      label: "2 rooms, 4 guests",
-    },
-    {
-      value: 3,
-      label: "1 room, 1 guest",
+      label: "Double Bedded",
     },
   ];
 
@@ -135,21 +132,65 @@ function HotelPage() {
     }
   }, [query]);
 
+    // Calculate average price per night for each hotel and update min/max prices
+    useEffect(() => {
+      if (hotels.length > 0) {
+        const prices = hotels.map((hotel) => {
+          const averagePrice = hotel.rooms?.length
+            ? hotel.rooms.reduce((sum, room) => sum + (room.roomDetail.pricePerNight || 0), 0) / hotel.rooms.length
+            : 0;
+          return averagePrice;
+        });
+  
+        setMinPrice(Math.min(...prices));
+        setMaxPrice(Math.max(...prices));
+        setPriceRange([Math.min(...prices), Math.max(...prices)]);
+      }
+    }, [hotels]);
+
   // Filter hotels based on location (hotelName) when location changes
   useEffect(() => {
+    let filtered = hotels.map((hotel) => ({
+      ...hotel,
+      averagePricePerNight: hotel.rooms?.length
+        ? hotel.rooms.reduce((sum, room) => sum + (room.roomDetail.pricePerNight || 0), 0) / hotel.rooms.length
+        : 0,
+    }));
+
     if (location) {
-      const filtered = hotels.filter((hotel) =>
+      filtered = filtered.filter((hotel) =>
         hotel.hotelName.toLowerCase().includes(location.toLowerCase())
       );
-      setFilteredHotels(filtered);
-    } else {
-      setFilteredHotels(hotels); // If location is empty, show all hotels
     }
-  }, [location, hotels]);
+
+    if (selectedBedID) {
+      filtered = filtered.filter((hotel) =>
+        hotel.rooms.some((room) =>
+          room.bedRooms.some((bedRoom) => bedRoom.bedID === selectedBedID)
+        )
+      );
+    }
+
+    filtered = filtered.filter(
+      (hotel) =>
+        hotel.averagePricePerNight >= priceRange[0] &&
+        hotel.averagePricePerNight <= priceRange[1]
+    );
+
+    setFilteredHotels(filtered);
+  }, [location, hotels, selectedBedID, priceRange]);
+
+  const handleSliderChange = (value) => {
+    setPriceRange(value);
+  };
+
 
   // Handle location input change
   const handleLocationChange = (e) => {
     setLocation(e.target.value); // Update location state on input change
+  };
+  const handleRoomSelection = (value) => {
+    setSelectedBedID(value); // Update the selected bedID
   };
 
   return (
@@ -201,8 +242,9 @@ function HotelPage() {
             placeholder="Select Room"
             options={data}
             allowClear
-            value={room}
-            onChange={setRoom}
+            value={selectedBedID}
+            onChange={handleRoomSelection}
+
           />
         </div>
       </div>
@@ -227,17 +269,18 @@ function HotelPage() {
                   }
                 >
                   <div className="mb-6">
-                    <Slider
-                      range
-                      min={minPrice}
-                      max={maxPrice}
-                      defaultValue={priceRange}
-                      className="mb-4"
-                    />
-                    <p className="flex justify-between">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
-                    </p>
+                  <Slider
+                    range
+                    min={minPrice}
+                    max={maxPrice}
+                    value={priceRange}
+                    onChange={handleSliderChange}
+                    className="mb-4"
+                  />
+                  <p className="flex justify-between">
+                    <span>${priceRange[0]}</span>
+                    <span>${priceRange[1]}</span>
+                  </p>
                   </div>
                 </Collapse.Panel>
 

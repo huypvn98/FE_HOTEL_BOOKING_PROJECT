@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchBooking } from "../../../redux/slices/bookingSlice";
 import moment from "moment";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router";
 
 const { Title, Text } = Typography;
 
@@ -28,7 +29,7 @@ const BookingCart = () => {
   const role = user?.roles;
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.BookingSlice?.loading);
-
+  const navigate = useNavigate()
   const [checkInDate, setCheckInDate] = useState(
     localStorage.getItem("checkInDate")
   );
@@ -213,24 +214,8 @@ const BookingCart = () => {
               ) : (
                 <>
                   <Title level={4}>Login or Sign up to book</Title>
-                  <Input
-                    className="rounded-none mb-4"
-                    size="large"
-                    placeholder="Phone Number"
-                  ></Input>
-                  <Text type="secondary">
-                    We’ll call or text you to confirm your number. Standard
-                    message and data rates apply. Privacy Policy
-                  </Text>
-                  <br />
-                  <Button
-                    className="w-full mt-5 rounded-none text-white"
-                    style={{ background: "#1E91B6" }}
-                    size="large"
-                  >
-                    Continue
-                  </Button>
-                  <Divider>Or</Divider>
+                
+                  
                   <Row justify="space-around">
                     <Button size="large" className="w-56 rounded-none">
                       <Facebook color="blue" variant="Bold"></Facebook>
@@ -245,7 +230,8 @@ const BookingCart = () => {
                       <Apple color="black" variant="Bold"></Apple>
                     </Button>
                   </Row>
-                  <Button size="large" className="w-full mt-4">
+                  <Divider>Or</Divider>
+                  <Button onClick={()=>{navigate("/login", { state: { prev: "cart" } })}} size="large" className="w-full mt-4">
                     <MailOutlined></MailOutlined> Continue with email
                   </Button>
                 </>
