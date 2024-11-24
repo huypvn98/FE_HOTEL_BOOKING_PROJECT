@@ -234,7 +234,7 @@ function Home() {
             </div>
             <div className="grid grid-cols-4 gap-4 pt-[60px]">
               {loading ? (
-                <div className="flex justify-center items-center h-full">
+                <div className="flex justify-center items-center  h-full">
                   <MagnifyingGlass
                     visible={true}
                     height="80"
@@ -250,44 +250,52 @@ function Home() {
                 <p>Error: {error}</p>
               ) : (
                 Array.isArray(hotels) &&
-                currentHotels.map((hotel) => (
-                  <Link
-                    to={`/hotel/detail/${hotel.hotelID}`}
-                    key={hotel.hotelID}
-                  >
-                    <div className="space-y-4">
-                      <div>
-                        <img
-                          alt="hotel"
-                          src={`${baseURL}${hotel.urlImage}`}
-                          className="rounded-[24px]"
-                          style={{ height: "404px", width: "330px" }}
-                        />
-                      </div>
-                      <div className="flex flex-col space-y-3">
+                currentHotels.map((hotel) => {
+                  const hotelRoom = hotel.rooms[0];
+                  const formattedPrice = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    minimumFractionDigits: 3,
+                  }).format(hotelRoom?.roomDetail?.pricePerNight);
+                  return (
+                    <Link
+                      to={`/hotel/detail/${hotel.hotelID}`}
+                      key={hotel.hotelID}
+                    >
+                      <div className="space-y-4">
                         <div>
-                          <p className="font-sans font-bold leading-[32.68px] text-[24px]">
-                            {hotel.hotelName}
-                          </p>
-                          <p>HCM city</p>
+                          <img
+                            alt="hotel"
+                            src={`${baseURL}${hotel.urlImage}`}
+                            className="rounded-[24px]"
+                            style={{ height: "404px", width: "330px" }}
+                          />
                         </div>
-                        <div className="flex flex-row space-x-2 items-center">
-                          <p className="text-[#A9B489] font-bold text-[24px] leading-[32.68px]">
-                            $40
-                          </p>
-                          <p className="text-[18px] leading-[24.51px] font-semibold">
-                            per night
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-normal font-sans text-[18px] leading-[26px] line-clamp-2">
-                            {hotel.description}
-                          </p>
+                        <div className="flex flex-col space-y-3">
+                          <div>
+                            <p className="font-sans font-bold leading-[32.68px] text-[24px]">
+                              {hotel.hotelName}
+                            </p>
+                            <p>HCM city</p>
+                          </div>
+                          <div className="flex flex-row space-x-2 items-center">
+                            <p className="text-[#A9B489] font-bold text-[24px] leading-[32.68px]">
+                            {formattedPrice}
+                            </p>
+                            <p className="text-[18px] leading-[24.51px] font-semibold">
+                              per night
+                            </p>
+                          </div>
+                          <div>
+                            <p className="font-normal font-sans text-[18px] leading-[26px] line-clamp-2">
+                              {hotel.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))
+                    </Link>
+                  );
+                })
               )}
             </div>
           </div>

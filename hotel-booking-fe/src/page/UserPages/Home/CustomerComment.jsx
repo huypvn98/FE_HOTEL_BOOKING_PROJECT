@@ -8,7 +8,7 @@ function CustomerComment() {
   
   // Filter reviews with rating 4 and 5
   const filteredReviews = reviewData.filter(
-    (review) => review.rating === 4 || review.rating === 5
+    (review) => review.rating === 3 || review.rating === 4 || review.rating === 5
   );
 
   // Get current reviews for pagination
