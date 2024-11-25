@@ -10,6 +10,10 @@ export const roomsByHotel = (state) => state.roomSlice.rooms;
 
 export const allRoom = (state) => state.roomSlice.allRoom;
 
+export const roomDetail = (state) => state.roomDetailSlice.roomDetail;
+
+export const bedDetail = (state) => state.bedSlice.bedDetail;
+
 export const userSlice = (state) => state.UserSlice.data;
 
 export const BookingSlice = (state) => state.BookingSlice.data;

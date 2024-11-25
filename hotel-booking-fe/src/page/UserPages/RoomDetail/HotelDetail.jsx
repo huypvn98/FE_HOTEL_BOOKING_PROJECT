@@ -1,41 +1,55 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import pointer from "../../../assets/pointer.png";
 import { Badge, Button } from "antd";
 import { HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import "./HotelDetail.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { fetchHotelDetail } from "../../../redux/slices/hotelSlice";
-import { hotelDetail, roomsByHotel } from "../../../redux/selector";
+import {
+  fetchHotelDetail,
+  fetchHotels,
+} from "../../../redux/slices/hotelSlice";
+import {
+  bed,
+  bedDetail,
+  hotelDetail,
+  roomDetail,
+  roomsByHotel,
+} from "../../../redux/selector";
 import { images } from "./imagesData";
-import { fetchAllRoom, fetchRoomByHotel } from "../../../redux/slices/roomSlice";
+import {
+  fetchAllRoom,
+  fetchRoomByHotel,
+} from "../../../redux/slices/roomSlice";
+import { fetchAllRoomDetail } from "../../../redux/slices/roomDetailSlice";
+import { fetchAllBedDetail } from "../../../redux/slices/bedSlice";
 
 const HotelDetail = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const baseURL =
-  "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
+    "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
 
   const rooms = [
     {
-      id:1,
+      id: 1,
       type: "Superior room - City view",
       bed: "1 double bed or 2 twin beds",
       price: "$240/night",
     },
     {
-      id:2,
+      id: 2,
       type: "Superior room - City view",
       bed: "1 double bed or 2 twin beds",
       price: "$240/night",
     },
     {
-      id:3,
+      id: 3,
       type: "Superior room - City view",
       bed: "1 double bed or 2 twin beds",
       price: "$240/night",
     },
     {
-      id:4,
+      id: 4,
       type: "Superior room - City view",
       bed: "1 double bed or 2 twin beds",
       price: "$240/night",
@@ -138,12 +152,27 @@ const HotelDetail = () => {
   const dispatch = useDispatch();
   const hotel = useSelector(hotelDetail);
   const roomsById = useSelector(roomsByHotel);
+  const roomDetails = useSelector(roomDetail);
+  const bedDetails = useSelector(bedDetail);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    dispatch(fetchAllRoom())
+    dispatch(fetchAllRoom());
     dispatch(fetchHotelDetail(id));
-    dispatch(fetchRoomByHotel(id))
+    dispatch(fetchRoomByHotel(id));
+    dispatch(fetchAllRoomDetail());
+    dispatch(fetchAllBedDetail());
   }, [dispatch, id]);
+
+  useEffect(() => {
+    // Simulating data fetch
+    if (hotel?.rooms) {
+      const timer = setTimeout(() => {
+        setLoading(false); // Stop loading once data is fetched
+      }, 5000); // Replace with actual fetch timing
+      return () => clearTimeout(timer);
+    }
+  }, [hotel?.rooms]);
 
   console.log("Hotel ID:", id);
 
@@ -152,7 +181,12 @@ const HotelDetail = () => {
 
   // Add a check to handle the case when hotel data is not yet loaded
   //if (!hotel) return <div>No hotel data available</div>;
-console.log(roomsById)
+  console.log("room by hotelId: ", roomsById);
+
+  console.log("roomDetail: ", roomDetails);
+
+  console.log("bedDetail: ", bedDetails);
+  console.log("hotel", hotel);
   return (
     <div style={{ marginTop: "100px" }} className="max-w-6xl mx-auto p-4">
       {/* Header */}
@@ -173,7 +207,7 @@ console.log(roomsById)
           style={{ flexDirection: "column" }}
           className="flex items-center gap-2"
         >
-          <div className="text-2xl font-bold">$240/nights</div>
+          <div className="text-2xl font-bold">$240/night</div>
           {/* Icon Buttons */}
           <div className="flex items-center gap-2">
             <Button
@@ -227,11 +261,23 @@ console.log(roomsById)
 
       {/* Image Gallery */}
       <div className="grid grid-cols-4 gap-2 mb-6">
-        <div className="col-span-2 row-span-2">
+        <div className="col-span-2 row-span-2 relative">
+          {/* Show spinner while loading */}
+          {loading && (
+            <div className="absolute inset-0 flex justify-center items-center bg-gray-200 rounded">
+              <div className="spinner"></div>
+            </div>
+          )}
+
+          {/* Main Image */}
           <img
+            style={{ height: "392px" }}
             src={`${baseURL}${hotel?.urlImage}`}
             alt="Main property view"
-            className="w-full h-full object-cover rounded"
+            className={`w-full h-full object-cover rounded ${
+              loading ? "hidden" : "block"
+            }`}
+            onLoad={() => setLoading(false)} // Hide spinner after image loads
           />
         </div>
         {images.slice(1).map((img, idx) => (
@@ -296,31 +342,118 @@ console.log(roomsById)
         ))}
       </div>
 
+      {/* <h2>Rooms</h2>
+      {roomsById && roomsById.length > 0 ? (
+        roomsById.map((room) => (
+          <div key={room.id}>
+            <h3>Room: {room.roomNumber}</h3>
+            <p>Square Feet: {room.roomSquare}</p>
+            <p>Quantity: {room.quantity}</p>
+            <p>bed Id: {room.idBed}</p>
+          </div>
+        ))
+      ) : (
+        <p>No rooms available for this hotel.</p>
+      )}
+
+      <div>
+        <h2>Rooms</h2>
+        {roomDetails && roomDetails.length > 0 ? (
+          roomDetails.map((room) => (
+            <div key={room.id}>
+              <h3>Room Type: {room.roomType}</h3>
+              <p>Room View: {room.roomView}</p>
+              <p>Room Fittings: {room.roomFittings}</p>
+            </div>
+          ))
+        ) : (
+          <p>No rooms available for this hotel.</p>
+        )}
+      </div>
+
+      <div>
+        <h2>Rooms</h2>
+        {bedDetails && bedDetails.length > 0 ? (
+          bedDetails.map((room) => (
+            <div key={room.id}>
+              <h3>{room.bedID}</h3>
+            </div>
+          ))
+        ) : (
+          <p>No rooms available for this hotel.</p>
+        )}
+      </div> */}
+
+      {/* <h2>Test</h2>
+      {hotel?.rooms?.map((room, index) => (
+        <div key={index}>
+          <p>
+            {room?.roomDetail?.roomType} - {room?.roomDetail?.roomView}
+          </p>
+          <p></p>
+          <p>Price: {room?.roomDetail?.pricePerNight}</p>
+          <p>
+            Availability:{" "}
+            {room?.roomDetail?.isAvailable ? "Available" : "Not Available"}
+          </p>
+        </div>
+      ))} */}
+
       {/* Available Rooms */}
       <div className="bg-white rounded-lg shadow-md mb-6">
         <h2 className="text-xl font-bold p-6 border-b">Available Rooms</h2>
         <div className="divide-y">
-          {rooms.map((room, idx) => (
-            <div key={idx} className="flex justify-between items-center p-6">
-              <div>
-                <h3 className="font-semibold">{room.type}</h3>
-                <p className="text-sm text-gray-500">{room.bed}</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="font-bold">{room.price}</span>
-                <Button
-                  style={{
-                    background: "#a9b489",
-                    border: "none",
-                    color: "white",
-                  }}
-                  onClick={()=>{navigate(`/bookingcart/${room.id}`)}}
-                >
-                  Book Now
-                </Button>
-              </div>
+          {loading ? (
+            // Spinner Animation
+            <div className="flex justify-center items-center py-12">
+              <div className="spinner"></div>
             </div>
-          ))}
+          ) : hotel?.rooms && hotel.rooms.length > 0 ? (
+            hotel.rooms.map((room) => (
+              <div
+                key={room.id}
+                className="flex justify-between items-center p-6"
+              >
+                {/* Room Details */}
+                <div>
+                  <h3 style={{ fontWeight: "bold" }}>
+                    {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
+                  </h3>
+                  <p>{room.roomDetail?.roomFittings}</p>
+                  <p>Room number: {room.roomNumber}</p>
+                </div>
+
+                {/* Bed Type */}
+                <p>
+                  {room.bedRooms[0]?.bed?.bedID === 1
+                    ? "Single Bed"
+                    : room.bedRooms[0]?.bed?.bedID === 2
+                    ? "Double Bed"
+                    : "Not found"}
+                </p>
+                <p>{room.bedRooms[0]?.quantity}</p>
+
+                {/* Price and Book Button */}
+                <div className="flex items-center gap-4">
+                  <h3 style={{ fontWeight: "bold" }}>
+                    ${room.roomDetail?.pricePerNight}/night
+                  </h3>
+                  <Button
+                    style={{
+                      background: "#a9b489",
+                      border: "none",
+                      color: "white",
+                    }}
+                    onClick={() => navigate(`/bookingcart/${room.id}`)}
+                  >
+                    Book Now
+                  </Button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No rooms are currently available for this hotel!</p>
+          )}
         </div>
       </div>
 

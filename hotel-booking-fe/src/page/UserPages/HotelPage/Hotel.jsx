@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Input, DatePicker, Select, Slider, Checkbox, Collapse } from "antd";
+import {
+  Input,
+  DatePicker,
+  Select,
+  Slider,
+  Checkbox,
+  Collapse,
+  Spin,
+  List,
+} from "antd";
 import { CarOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
@@ -16,12 +25,19 @@ function HotelPage() {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [nights, setNights] = useState(0);
-  const [priceRange, setPriceRange] = useState([100, 2000]);
+  const [priceRange, setPriceRange] = useState([0, 2000]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000);
   const [room, setRoom] = useState(null);
   const query = useQuery();
-  const location = query.get("location");
+  //const location = query.get("location");
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
+
+  const [location, setLocation] = useState("");
+  const [filteredHotels, setFilteredHotels] = useState([]);
+
+  // Extract min and max price per night
 
   useEffect(() => {
     dispatch(fetchHotels());
@@ -107,6 +123,35 @@ function HotelPage() {
     },
   ];
 
+  useEffect(() => {
+    console.log("hotels: ", hotels);
+  }, [hotels]); // Logs only when `hotels` changes
+
+  // Get location from query params if available
+  useEffect(() => {
+    const locationFromQuery = query.get("location");
+    if (locationFromQuery) {
+      setLocation(locationFromQuery); // Set the location if it's in the URL
+    }
+  }, [query]);
+
+  // Filter hotels based on location (hotelName) when location changes
+  useEffect(() => {
+    if (location) {
+      const filtered = hotels.filter((hotel) =>
+        hotel.hotelName.toLowerCase().includes(location.toLowerCase())
+      );
+      setFilteredHotels(filtered);
+    } else {
+      setFilteredHotels(hotels); // If location is empty, show all hotels
+    }
+  }, [location, hotels]);
+
+  // Handle location input change
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value); // Update location state on input change
+  };
+
   return (
     <div className="px-[150px] pb-[27px] mt-[160px]">
       {/*Search bar */}
@@ -118,6 +163,7 @@ function HotelPage() {
             prefix={<CarOutlined />}
             size="large"
             value={location}
+            onChange={handleLocationChange} // Trigger filter when input changes
           />
 
           <DatePicker
@@ -183,10 +229,9 @@ function HotelPage() {
                   <div className="mb-6">
                     <Slider
                       range
-                      min={100}
-                      max={2000}
+                      min={minPrice}
+                      max={maxPrice}
                       defaultValue={priceRange}
-                      onChange={setPriceRange}
                       className="mb-4"
                     />
                     <p className="flex justify-between">
@@ -269,7 +314,9 @@ function HotelPage() {
             <div className="flex flex-row justify-between mb-4 text-base">
               <span>
                 <span className="font-semibold text-black text-[18px]">
-                  Showing {Array.isArray(hotels) ? hotels.length : 0} of{" "}
+                  Showing{" "}
+                  {Array.isArray(filteredHotels) ? filteredHotels.length : 0}{" "}
+                  out of{" "}
                 </span>
                 <span className="text-[#FF8682] text-[18px]">
                   {" "}
@@ -306,8 +353,8 @@ function HotelPage() {
               ) : error ? (
                 <p>Error: {error}</p>
               ) : (
-                Array.isArray(hotels) &&
-                hotels.map((hotel) => (
+                Array.isArray(filteredHotels) &&
+                filteredHotels.map((hotel) => (
                   <HotelCard key={hotel.hotelID} hotel={hotel} />
                 ))
               )}
