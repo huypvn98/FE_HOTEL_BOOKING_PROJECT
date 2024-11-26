@@ -3,7 +3,7 @@ import { EnvironmentOutlined, HeartOutlined } from "@ant-design/icons";
 import { Divider, } from "antd";
 import { Link } from "react-router-dom";
 
-function HotelCard({ hotel }) {
+function HotelCard({ hotel, checkInDate, checkOutDate }) {
   const baseURL = "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
   const averagePricePerNight = hotel.rooms && hotel.rooms.length > 0
     ? (hotel.rooms.reduce((sum, room) => sum + (room.roomDetail.pricePerNight || 0), 0) / hotel.rooms.length).toFixed(2)
@@ -66,7 +66,7 @@ function HotelCard({ hotel }) {
             <button className="p-2 border border-[#a9b489] rounded-md hover:bg-red-400 hover:text-white hover:border-red-400 transition w-[55px] h-[55px]">
               <HeartOutlined className="text-lg p-2" />
             </button>
-            <Link to={`/hotel/detail/${hotel.hotelID}`}>
+            <Link to={`/hotel/detail/${hotel.hotelID}`} state={{checkInDate:checkInDate, checkOutDate:checkOutDate}}>
               <button className="bg-[#a9b489] text-white text-[15px] px-4 py-2 rounded-md hover:bg-[#afb896] transition w-[550px] h-[55px]">
                 View Place
               </button>

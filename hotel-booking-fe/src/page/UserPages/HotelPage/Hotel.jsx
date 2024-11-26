@@ -398,7 +398,7 @@ function HotelPage() {
               ) : (
                 Array.isArray(filteredHotels) &&
                 filteredHotels.map((hotel) => (
-                  <HotelCard key={hotel.hotelID} hotel={hotel} />
+                  <HotelCard key={hotel.hotelID} hotel={hotel} checkInDate={checkInDate} checkOutDate={checkOutDate}/>
                 ))
               )}
             </div>
