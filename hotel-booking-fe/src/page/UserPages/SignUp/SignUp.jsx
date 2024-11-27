@@ -1,20 +1,13 @@
 import React from "react";
 import "./SignUp.css";
 import { Button, Checkbox, Form, Input, Select } from "antd";
-import {
-  GoogleOutlined,
-  LockOutlined,
-  MailOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import googleIcon from "../../../image/googleIcon.png";
-import { useDispatch } from "react-redux";
 import { registerUser } from "../../../redux/slices/authSlice";
-
+import { useDispatch, useSelector } from "react-redux";
 const SignUp = () => {
   const dispatch = useDispatch();
-
+  const loading = useSelector((state) => state.authSlice?.loading);
   const onFinish = (values) => {
     dispatch(registerUser(values));
   };
@@ -31,7 +24,6 @@ const SignUp = () => {
     {
       value: "email giao duc",
       label: "Email giáo dục",
-      
     },
   ];
 
@@ -179,6 +171,7 @@ const SignUp = () => {
               type="primary"
               htmlType="submit"
               block
+              loading={loading}
               style={{
                 backgroundColor: "#A9B489",
                 borderColor: "#A9B489",
@@ -189,14 +182,14 @@ const SignUp = () => {
             </Button>
           </Form.Item>
 
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>or</div>
+          {/* <div style={{ textAlign: "center", marginBottom: "10px" }}>or</div> */}
 
           {/* Google Sign Up Button */}
-          <Form.Item>
+          {/* <Form.Item>
             <Button
               size="large"
               block
-              icon={<img src={googleIcon} style={{ width: "20px" }} />}
+              icon={<img src={googleIcon} alt="" style={{ width: "20px" }} />}
               style={{
                 backgroundColor: "#fff",
                 color: "#000",
@@ -205,11 +198,11 @@ const SignUp = () => {
             >
               Sign Up with Google
             </Button>
-          </Form.Item>
+          </Form.Item> */}
 
           {/* Log In Link */}
-          <div style={{ textAlign: "center" }}>
-            Already have an account?
+          <div className="flex flex-row space-x-2 items-center justify-center">
+            <p> Already have an account?</p>
             <Link to="/login" style={{ color: "#A9B489" }}>
               Log In
             </Link>
