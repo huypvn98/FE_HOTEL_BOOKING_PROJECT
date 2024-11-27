@@ -187,7 +187,7 @@ const BookingCart = () => {
                   : "Double Bed"} */}
               </Title>
               <Text className="text-[#a9b489] font-extrabold text-[32px]">
-                $ {room?.roomDetail?.pricePerNight}{" "}
+              {room?.roomDetail?.pricePerNight * 1000} VND{" "}
                 <span className="text-[14px]">/night</span>
               </Text>
             </Row>
@@ -350,7 +350,7 @@ const BookingCart = () => {
             <Text strong>Price Details</Text>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Base Fare</Text>
-              <Text strong>${room?.roomDetail?.pricePerNight}</Text>
+              <Text strong>{room?.roomDetail?.pricePerNight * 1000} VND</Text>
             </Row>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Nights</Text>
@@ -371,7 +371,7 @@ const BookingCart = () => {
             <Divider></Divider>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Total</Text>
-              <Text strong>${room?.roomDetail?.pricePerNight * nights} </Text>
+              <Text strong>{room?.roomDetail?.pricePerNight * 1000 * nights} VND</Text>
             </Row>
           </Card>
         </Col>

@@ -414,12 +414,12 @@ const HotelDetail = () => {
                 >
                   {/* Room Details */}
                   <div>
-                    <h3 style={{ fontWeight: "bold" }}>
-                      {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
-                    </h3>
-                    <p>{room.roomDetail?.roomFittings}</p>
-                    {/* <p>Room number: {room.roomNumber}</p> */}
-                  </div>
+                  <h3 style={{ fontWeight: "bold" }}>
+                    {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
+                  </h3>
+                  <p>{room.roomDetail?.roomFittings}</p>
+                  <p>Room number: {room.roomNumber}</p>
+                </div>
 
                   {/* Bed Type */}
                   <p>
@@ -442,7 +442,7 @@ const HotelDetail = () => {
                         border: "none",
                         color: "white",
                       }}
-                      onClick={() => navigate(`/bookingcart/${room.id}`)}
+                      onClick={() => navigate(`/bookingcart/${room.roomID}`)}
                     >
                       Book Now
                     </Button>
