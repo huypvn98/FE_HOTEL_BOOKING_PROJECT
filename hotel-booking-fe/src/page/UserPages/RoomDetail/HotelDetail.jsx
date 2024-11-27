@@ -110,9 +110,19 @@ const HotelDetail = () => {
   const roomDetails = useSelector(roomDetail);
   const bedDetails = useSelector(bedDetail);
   const [loading, setLoading] = useState(true); // Loading state
-  const location = useLocation()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState("");
 
-  console.log(location.state)
+  const openModal = (imageUrl) => {
+    setCurrentImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setCurrentImage(""), 300); // Delay clearing image for smooth close animation
+  };
+
 
   console.log("hotel", hotel)
 
@@ -194,8 +204,7 @@ const HotelDetail = () => {
         }}
       >
         <img src={pointer} style={{ height: "15px", margin: "2px 2px 0 0" }} />
-        City Center, 15 & 15A, Connaught Rd, Modi Colony, Pune, Maharashtra
-        411001
+        {hotel?.address}
       </div>
       <div
         style={{
@@ -241,14 +250,15 @@ const HotelDetail = () => {
               loading ? "hidden" : "block"
             }`}
             onLoad={() => setLoading(false)} // Hide spinner after image loads
+            onClick={() => openModal(`${baseURL}${hotel?.urlImage}`)} // Open modal on click
           />
         </div>
-        {images.slice(1).map((img, idx) => (
+        {hotel?.rooms?.map((room, idx) => (
           <div key={idx} className="h-48">
             <img
-              src={img}
-              alt={`Property view ${idx + 1}`}
+              src={room?.imageRooms[0]?.nameFileImg}
               className="w-full h-full object-cover rounded"
+              onClick={() => openModal(room?.imageRooms[0]?.nameFileImg)} // Open modal with the clicked room image
             />
           </div>
         ))}
@@ -259,6 +269,28 @@ const HotelDetail = () => {
       >
         View all photos
       </Button>
+
+      {/* Modal for Enlarged Image */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 fade-in-bg"
+          onClick={closeModal} // Close modal when clicking outside the image
+        >
+          <div className="relative">
+            {/* Close Button */}
+            <button className="close-button" onClick={closeModal}>
+              ✕
+            </button>
+            {/* Enlarged Image */}
+            <img
+              src={currentImage}
+              alt="Enlarged view"
+              className="max-w-full max-h-screen rounded fade-in-image"
+              style={{ width: "1400px", height: "700px", borderRadius: "10px" }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Overview */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -347,20 +379,16 @@ const HotelDetail = () => {
         )}
       </div> */}
 
-      {/* <h2>Test</h2>
+      {/* <h2>Test</h2> */}
       {hotel?.rooms?.map((room, index) => (
         <div key={index}>
-          <p>
-            {room?.roomDetail?.roomType} - {room?.roomDetail?.roomView}
-          </p>
-          <p></p>
-          <p>Price: {room?.roomDetail?.pricePerNight}</p>
-          <p>
-            Availability:{" "}
-            {room?.roomDetail?.isAvailable ? "Available" : "Not Available"}
-          </p>
+          <img
+            src={room?.imageRooms[0]?.nameFileImg}
+            className="w-full h-full object-cover rounded"
+            style={{ marginBottom: "10px" }}
+          />
         </div>
-      ))} */}
+      ))}
 
       {/* Available Rooms */}
       <div className="bg-white rounded-lg shadow-md mb-6">
