@@ -4,6 +4,7 @@ import { notification } from "antd";
 
 const initialState = {
   bookings: [],
+  paymentUrl: null,
   loading: false,
   error: null,
 };
@@ -26,6 +27,18 @@ export const fetchBooking = createAsyncThunk(
     try {
       const response = await postRequest("Booking/Create", payload);
       return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createPaymentUrl = createAsyncThunk(
+  "hotel/createPaymentUrl",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await postRequest("Payment/create-payment-url", payload);
+      return response.data.url;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -64,6 +77,18 @@ const BookingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         notification.error({ message: "Booking failed" });
+      })
+      .addCase(createPaymentUrl.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createPaymentUrl.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paymentUrl = action.payload;
+      })
+      .addCase(createPaymentUrl.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        
       });
   },
 });

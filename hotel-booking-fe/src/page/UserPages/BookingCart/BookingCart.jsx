@@ -8,6 +8,8 @@ import {
   Row,
   Typography,
   DatePicker,
+  QRCode,
+  Modal,
 } from "antd";
 import { Apple, Facebook, Google, Location } from "iconsax-react";
 import React, { useState, useEffect } from "react";
@@ -15,21 +17,32 @@ import LeftLine from "../../../image/Line 5.png";
 import RightLine from "../../../image/Line 6.png";
 import Building from "../../../image/building.png";
 import HotelImage from "../../../image/Frame 186.png";
-import { MailOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, MailOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBooking } from "../../../redux/slices/bookingSlice";
+import { createPaymentUrl, fetchBooking } from "../../../redux/slices/bookingSlice";
 import moment from "moment";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { fetchRoomById } from "../../../redux/slices/roomSlice";
+import { hotelDetail, roomById } from "../../../redux/selector";
+import { fetchHotelDetail } from "../../../redux/slices/hotelSlice";
 
 const { Title, Text } = Typography;
 
 const BookingCart = () => {
+  const { id } = useParams();
+
   const user = useSelector((state) => state.authSlice?.user);
-  const role = user?.roles;
+  const room = useSelector(roomById);
+  const roomLoading = useSelector((state) => state.roomSlice?.loading);
+  const qrUrl = useSelector((state) => state.BookingSlice?.paymentUrl);
+
+  const hotel = useSelector(hotelDetail);
+  // const role = user?.roles;
+  const role = localStorage.getItem("role")
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.BookingSlice?.loading);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [checkInDate, setCheckInDate] = useState(
     localStorage.getItem("checkInDate")
   );
@@ -37,7 +50,8 @@ const BookingCart = () => {
     localStorage.getItem("checkOutDate")
   );
   const [nights, setNights] = useState(localStorage.getItem("nights"));
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
   useEffect(() => {
     if (checkInDate && checkOutDate) {
       const nightsCount = moment(checkOutDate).diff(
@@ -48,7 +62,17 @@ const BookingCart = () => {
       localStorage.setItem("nights", nightsCount);
     }
   }, [checkInDate, checkOutDate]);
-
+  console.log(roomLoading);
+  useEffect(() => {
+    // First, fetch the room details by ID
+    dispatch(fetchRoomById(id));
+  }, [dispatch, id]);
+  useEffect(() => {
+    // Once the room data is available, dispatch fetchHotelDetail
+    if (room?.hotelID) {
+      dispatch(fetchHotelDetail(room.hotelID));
+    }
+  }, [dispatch, room]); // Triggered whenever `room` changes
   const handleCheckInChange = (date) => {
     const formattedDate = date ? date.format("YYYY-MM-DD") : null;
     setCheckInDate(formattedDate);
@@ -73,11 +97,11 @@ const BookingCart = () => {
   const handleProceed = () => {
     const currentDate = new Date();
     const bookingDate = currentDate.toISOString().split("T")[0];
-
+    const total = room?.roomDetail?.pricePerNight * nights
     const bookingPayload = {
       roomID: 7,
       userID: user.userID,
-      contactID:user.userID,
+      contactID: user.userID,
       depositID: 1,
       bookingDate,
       fromDate: checkInDate,
@@ -85,9 +109,36 @@ const BookingCart = () => {
       checkOutDate,
       bookingStatus: "da thanh toan",
       toDate: bookingDate,
-      note:"da thanh toan truoc"
+      note: "da thanh toan truoc",
     };
+    const paymentPayload ={
+      amount: total * 100,
+      transactionId: generateRandomId(),
+      orderDescription: `Payment`,
+      orderType:"service",
+      // returnUrl: `${window.location.origin}/payment-response`
+    }
+    console.log("paymentPayload", paymentPayload)
     dispatch(fetchBooking(bookingPayload));
+    dispatch(createPaymentUrl(paymentPayload))
+    setIsModalOpen(true)
+
+  };
+  
+  useEffect(()=>{
+  if(isModalOpen === true){
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setIsPaymentSuccessful(true)
+    }, 3000);
+    if(isPaymentSuccessful===true){
+      setTimeout(()=>{setIsPaymentSuccessful(false)},2000)
+    }
+  }
+
+  },[])
+  const handleModalClose = () => {
+    setIsModalOpen(false); 
   };
 
   const formattedCheckInDate = checkInDate
@@ -101,6 +152,28 @@ const BookingCart = () => {
     return current && current < dayjs().startOf("day");
   };
 
+  console.log(room);
+
+  const handleNavigating = () =>{
+    const cart = {
+      checkInDate,
+      checkOutDate,
+      id
+    }
+    localStorage.setItem("cart", JSON.stringify(cart))
+    navigate("/login");
+    
+  }
+
+  function generateRandomId(length = 10) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomId = '';
+    for (let i = 0; i < length; i++) {
+      randomId += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return randomId;
+  }
+
   return (
     <div className="mt-[200px] px-28">
       <Row justify="space-between">
@@ -108,10 +181,14 @@ const BookingCart = () => {
           <Card className="flex-col gap-6">
             <Row className="justify-between">
               <Title level={3}>
-                Superior room - 1 double bed or 2 twin beds
+                {/* {room?.roomDetail?.roomType} -{" "}
+                {room?.bedRooms[0]?.bed?.bedID === 1
+                  ? "Single Bed"
+                  : "Double Bed"} */}
               </Title>
               <Text className="text-[#a9b489] font-extrabold text-[32px]">
-                $ 240 <span className="text-[14px]">/night</span>
+                $ {room?.roomDetail?.pricePerNight}{" "}
+                <span className="text-[14px]">/night</span>
               </Text>
             </Row>
             <Card className="w-ful">
@@ -123,14 +200,11 @@ const BookingCart = () => {
                 />
                 <Col>
                   <Title level={4} style={{ margin: "0px" }}>
-                    Lemon Tree Premier Pune
+                    {hotel?.hotelName}
                   </Title>
                   <Row align={"middle"}>
                     <Location size="16" variant="Bold" />
-                    <Text>
-                      City Center, 15 & 15A, Connaught Rd, Modi Colony, Pune,
-                      Maharashtra 411001
-                    </Text>
+                    <Text>{hotel?.address}</Text>
                   </Row>
                 </Col>
               </Row>
@@ -215,8 +289,7 @@ const BookingCart = () => {
               ) : (
                 <>
                   <Title level={4}>Login or Sign up to book</Title>
-                
-                  
+
                   <Row justify="space-around">
                     <Button size="large" className="w-56 rounded-none">
                       <Facebook color="blue" variant="Bold"></Facebook>
@@ -232,7 +305,11 @@ const BookingCart = () => {
                     </Button>
                   </Row>
                   <Divider>Or</Divider>
-                  <Button onClick={()=>{navigate("/login", { state: { prev: "cart" } })}} size="large" className="w-full mt-4">
+                  <Button
+                    onClick={handleNavigating}
+                    size="large"
+                    className="w-full mt-4"
+                  >
                     <MailOutlined></MailOutlined> Continue with email
                   </Button>
                 </>
@@ -247,10 +324,14 @@ const BookingCart = () => {
                 <img src={HotelImage} alt="" />
               </Col>
               <Col span={15}>
+                <Row>
+                  {room?.roomDetail?.roomType} -{" "}
+                  {/* {room?.bedRooms[0]?.bed?.bedID === 1
+                    ? "Single Bed"
+                    : "Double Bed"} */}
+                </Row>
                 <Text>CVK Park Bosphorus...</Text>
-                <Title style={{ margin: "0px" }} level={5}>
-                  Superior room - 1 double bed or 2 twin beds
-                </Title>
+                <Title style={{ margin: "0px" }} level={5}></Title>
                 <Row className="gap-1">
                   <div
                     className="rounded w-5 px-4 py-2 flex justify-center align-middle"
@@ -269,7 +350,11 @@ const BookingCart = () => {
             <Text strong>Price Details</Text>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Base Fare</Text>
-              <Text strong>$240</Text>
+              <Text strong>${room?.roomDetail?.pricePerNight}</Text>
+            </Row>
+            <Row className="mt-4" justify={"space-between"}>
+              <Text>Nights</Text>
+              <Text strong>x{nights}</Text>
             </Row>
             {/* <Row className="mt-4" justify={"space-between"}>
               <Text>Discount</Text>
@@ -286,11 +371,48 @@ const BookingCart = () => {
             <Divider></Divider>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Total</Text>
-              <Text strong>$240</Text>
+              <Text strong>${room?.roomDetail?.pricePerNight * nights} </Text>
             </Row>
           </Card>
         </Col>
       </Row>
+      <Modal
+        title="Scan to Confirm"
+        visible={isModalOpen}
+        onCancel={handleModalClose}
+        footer={[
+          <Button key="close" onClick={handleModalClose}>
+            Close
+          </Button>,
+        ]}
+      >
+      <Row justify={"center"}>
+        <QRCode
+          value={qrUrl}
+          size={200}
+        />
+        </Row>
+      </Modal>
+      <Modal
+      visible={isPaymentSuccessful}
+      onCancel={()=>{setIsPaymentSuccessful(false)}}
+      footer={null}
+      centered
+    >
+      <Row justify="center" align="middle">
+        <Col>
+          <CheckCircleOutlined
+            style={{ fontSize: "60px", color: "#52c41a", marginBottom: "20px" }}
+          />
+        </Col>
+      </Row>
+      <Row justify="center" align="middle">
+        <Col>
+          <Title level={3}>Payment Successful</Title>
+          <Text>Your transaction has been completed successfully.</Text>
+        </Col>
+      </Row>
+    </Modal>
     </div>
   );
 };

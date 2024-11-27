@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
   const loading = useSelector((state) => state.authSlice?.loading);
   const location = useLocation();
-  const prev = location.state?.prev;
+  const cart = JSON.parse(localStorage.getItem("cart"))
 
 
   const onFinish = (values) => {
@@ -24,6 +24,7 @@ const Login = () => {
   };
 
   const handleLogin = () => {
+
     dispatch(login({ username, password }))
       .then((res) => {
         console.log(res);
@@ -32,10 +33,15 @@ const Login = () => {
           if (res.payload?.data?.userInfo.roles === "Admin") {
             navigate("admin");
           } else if (res.payload?.data?.userInfo.roles === "Customer") {
-            if(prev !== "cart"){
-              navigate("/bookingcart")
+            if(cart === undefined || cart === null || cart === "" ){
+            console.log("logged")  
+            console.log(cart)
+            // navigate("/");
+            
+            }else{
+              navigate(`/bookingcart/${cart?.id}`)
             }
-            navigate("/");
+            
           } else {
             message.error("Wrong username or password");
           }

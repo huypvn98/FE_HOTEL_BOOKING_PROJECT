@@ -4,6 +4,7 @@ import { getRequest } from "../../services/httpMethods";
 const initialState = {
   rooms: [],
   allRoom: [],
+  roomById: {},
   loading: false,
   error: null,
 };
@@ -24,6 +25,17 @@ export const fetchAllRoom = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await getRequest(`Room/getAll`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const fetchRoomById = createAsyncThunk(
+  "room/fetchRoomById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await getRequest(`Room/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -61,7 +73,21 @@ const roomSlice = createSlice({
       .addCase(fetchAllRoom.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch hotel details";
-      });
+      })
+      .addCase(fetchRoomById.pending, (state) => {
+        state.loading = true;
+        state.roomById = null; 
+        state.error = null;
+      })
+      .addCase(fetchRoomById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.roomById = action.payload;
+      })
+      .addCase(fetchRoomById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch hotel details";
+      })
+      
   },
 });
 
