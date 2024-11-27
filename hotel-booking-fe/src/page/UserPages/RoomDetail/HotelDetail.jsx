@@ -372,48 +372,56 @@ const HotelDetail = () => {
               <div className="spinner"></div>
             </div>
           ) : hotel?.rooms && hotel.rooms.length > 0 ? (
-            hotel.rooms.map((room) => (
-              <div
-                key={room.id}
-                className="flex justify-between items-center p-6"
-              >
-                {/* Room Details */}
-                <div>
-                  <h3 style={{ fontWeight: "bold" }}>
-                    {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
-                  </h3>
-                  <p>{room.roomDetail?.roomFittings}</p>
-                  <p>Room number: {room.roomNumber}</p>
-                </div>
+            hotel.rooms.map((room) => {
+              const formattedPrice = new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+                minimumFractionDigits: 3,
+              }).format(room.roomDetail?.pricePerNight);
 
-                {/* Bed Type */}
-                <p>
-                  {room.bedRooms[0]?.bed?.bedID === 1
-                    ? "Single Bed"
-                    : room.bedRooms[0]?.bed?.bedID === 2
-                    ? "Double Bed"
-                    : "Not found"}
-                </p>
-                <p>{room.bedRooms[0]?.quantity} room(s)</p>
+              return (
+                <div
+                  key={room.id}
+                  className="flex justify-between items-center p-6"
+                >
+                  {/* Room Details */}
+                  <div>
+                    <h3 style={{ fontWeight: "bold" }}>
+                      {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
+                    </h3>
+                    <p>{room.roomDetail?.roomFittings}</p>
+                    {/* <p>Room number: {room.roomNumber}</p> */}
+                  </div>
 
-                {/* Price and Book Button */}
-                <div className="flex items-center gap-4">
-                  <h3 style={{ fontWeight: "bold" }}>
-                    ${room.roomDetail?.pricePerNight}/night
-                  </h3>
-                  <Button
-                    style={{
-                      background: "#a9b489",
-                      border: "none",
-                      color: "white",
-                    }}
-                    onClick={() => navigate(`/bookingcart/${room.id}`)}
-                  >
-                    Book Now
-                  </Button>
+                  {/* Bed Type */}
+                  <p>
+                    {room.bedRooms[0]?.bed?.bedID === 1
+                      ? "Single Bed"
+                      : room.bedRooms[0]?.bed?.bedID === 2
+                      ? "Double Bed"
+                      : "Not found"}
+                  </p>
+                  {/* <p>{room.bedRooms[0]?.quantity}</p> */}
+
+                  {/* Price and Book Button */}
+                  <div className="flex items-center gap-4">
+                    <h3 style={{ fontWeight: "bold" }}>
+                      {formattedPrice}/night
+                    </h3>
+                    <Button
+                      style={{
+                        background: "#a9b489",
+                        border: "none",
+                        color: "white",
+                      }}
+                      onClick={() => navigate(`/bookingcart/${room.id}`)}
+                    >
+                      Book Now
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p>No rooms are currently available for this hotel!</p>
           )}
