@@ -317,10 +317,7 @@ const HotelDetail = () => {
         >
           <div className="relative">
             {/* Close Button */}
-            <button
-              className="absolute top-4 right-4 bg-white rounded-full p-2 text-black"
-              onClick={closeModal}
-            >
+            <button className="close-button" onClick={closeModal}>
               ✕
             </button>
             {/* Enlarged Image */}
