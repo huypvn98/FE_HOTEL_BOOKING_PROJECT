@@ -312,7 +312,7 @@ const HotelDetail = () => {
       {/* Modal for Enlarged Image */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 fade-in-bg"
           onClick={closeModal} // Close modal when clicking outside the image
         >
           <div className="relative">
@@ -327,7 +327,7 @@ const HotelDetail = () => {
             <img
               src={currentImage}
               alt="Enlarged view"
-              className="max-w-full max-h-screen rounded"
+              className="max-w-full max-h-screen rounded fade-in-image"
               style={{ width: "1400px", height: "700px", borderRadius: "10px" }}
             />
           </div>
