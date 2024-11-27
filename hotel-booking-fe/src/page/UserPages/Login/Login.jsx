@@ -1,25 +1,20 @@
-import {
-  GoogleOutlined,
-  LockOutlined,
-  MailOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message } from "antd";
 import React, { useState } from "react";
 import "./Login.css";
-import { Link, useNavigate } from "react-router-dom";
-import googleIcon from "../../../image/googleIcon.png";
-import { useDispatch } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../redux/slices/authSlice";
-import { testFunc } from "../../../redux/slices/testSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
-  //const loading = useSelector((state) => state.auth.loading);
-  //const error = useSelector((state) => state.auth.error);
+  const navigate = useNavigate();
+  const loading = useSelector((state) => state.authSlice?.loading);
+  const location = useLocation();
+  const cart = JSON.parse(localStorage.getItem("cart"))
+
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
@@ -29,21 +24,34 @@ const Login = () => {
   };
 
   const handleLogin = () => {
+
     dispatch(login({ username, password }))
-    .then((res)=>{
-      console.log(res)
-      localStorage.setItem("userID", res.payload.data.userInfo.userID)
-      if(res.payload && res.payload.status === 200 && res.payload.data.userInfo.roles === "Admin"){
-          navigate("admin")
-      } else if (res.payload && res.payload.status === 200 && res.payload.data.userInfo.roles === "Customer"){
-        navigate("/")
-        localStorage.setItem("role", res.payload.data.userInfo.roles)
-      }    
-      else{
-        message.error("Wrong username or password")
-      }
-      // navigate("admin")
-    })
+      .then((res) => {
+        console.log(res);
+        if (res.payload.status === 200) {
+          message.success("Login successful!");
+          if (res.payload?.data?.userInfo.roles === "Admin") {
+            navigate("admin");
+          } else if (res.payload?.data?.userInfo.roles === "Customer") {
+            if(cart === undefined || cart === null || cart === "" ){
+            console.log("logged")  
+            console.log(cart)
+            // navigate("/");
+            
+            }else{
+              navigate(`/bookingcart/${cart?.id}`)
+            }
+            
+          } else {
+            message.error("Wrong username or password");
+          }
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        message.error("Login failed. Please try again.");
+      });
   };
 
   return (
@@ -117,17 +125,17 @@ const Login = () => {
                 borderColor: "#A9B489",
                 borderRadius: "20px",
               }}
-              //disabled={loading}
+              loading={loading}
               onClick={handleLogin}
             >
               Login
             </Button>
           </Form.Item>
 
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>or</div>
+          {/* <div style={{ textAlign: "center", marginBottom: "10px" }}>or</div> */}
 
           {/* Google Sign Up Button */}
-          <Form.Item>
+          {/* <Form.Item>
             <Button
               size="large"
               block
@@ -140,11 +148,11 @@ const Login = () => {
             >
               Log In with Google
             </Button>
-          </Form.Item>
+          </Form.Item> */}
 
           {/* Log In Link */}
-          <div style={{ textAlign: "center" }}>
-            Don't have an account?
+          <div className="flex flex-row space-x-2 items-center justify-center">
+            <p> Don't have an account?</p>
             <Link to="/signup" style={{ color: "#A9B489" }}>
               Sign Up
             </Link>

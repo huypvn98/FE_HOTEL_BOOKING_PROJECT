@@ -95,6 +95,11 @@ const AdminLayout = ({ children }) => {
                 label: "Refund",
               },
               {
+                key: "admin/review-management",
+                icon: <MessageTwoTone />,
+                label: "Review",
+              },
+              {
                 key: "admin/message",
                 icon: <MessageTwoTone />,
                 label: "Message",
@@ -173,7 +178,7 @@ const AdminLayout = ({ children }) => {
           style={{
             display: "flex",
             justifyContent: "center",
-            height: "100vh",
+            // height: "100vh",
             padding: "0px 24px",
             background: "#F5F5F5",
           }}

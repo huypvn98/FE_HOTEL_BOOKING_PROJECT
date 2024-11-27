@@ -8,3 +8,78 @@
   padding: 8px 16px;
   border-radius: 6px;
 }
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #a9b489;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+.modal-container {
+  position: fixed;
+  inset: 0; /* Ensures it spans the full screen */
+  z-index: 1000; /* A high value to bring it above other elements */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Background Fade-in Animation */
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Image Fade-in Animation */
+@keyframes fadeInImage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Background Animation */
+.fade-in-bg {
+  animation: fadeInBackground 0.3s ease-out; /* Background fades in first */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 1000; /* Ensure this is high enough */
+}
+
+/* Image Animation */
+.fade-in-image {
+  animation: fadeInImage 0.6s ease-out 0.3s; /* Image fades in after 0.3s */
+  opacity: 0; /* Start with hidden image */
+  animation-fill-mode: forwards; /* Ensure it stays visible after animation */
+}
+
+.close-button {
+  position: absolute;
+  top: 16px; /* Adjust according to your design */
+  right: 16px; /* Adjust according to your design */
+  z-index: 1100; /* Ensure it’s above the modal content */
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: white; /* Match your modal’s theme */
+  cursor: pointer;
+  animation: fadeInImage 0.6s ease-out 0.3s; /* Image fades in after 0.3s */
+  opacity: 0; /* Start with hidden image */
+  animation-fill-mode: forwards; /* Ensure it stays visible after animation */
+}

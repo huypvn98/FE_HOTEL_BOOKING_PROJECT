@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Input, DatePicker, Select, Slider, Checkbox, Collapse } from "antd";
+import {
+  Input,
+  DatePicker,
+  Select,
+  Slider,
+  Checkbox,
+  Collapse,
+  Spin,
+  List,
+} from "antd";
 import { CarOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
@@ -16,17 +25,24 @@ function HotelPage() {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [nights, setNights] = useState(0);
-  const [priceRange, setPriceRange] = useState([100, 2000]);
+  const [priceRange, setPriceRange] = useState([0, 2000]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000);
   const [room, setRoom] = useState(null);
   const query = useQuery();
-  const location = query.get("location");
+  //const location = query.get("location");
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotelSlice);
+
+  const [location, setLocation] = useState("");
+  const [filteredHotels, setFilteredHotels] = useState([]);
+  const [selectedBedID, setSelectedBedID] = useState(null); // To track the selected bedID
+
+  // Extract min and max price per night
 
   useEffect(() => {
     dispatch(fetchHotels());
   }, [dispatch]);
-
   useEffect(() => {
     const checkIn = query.get("checkInDate");
     const checkOut = query.get("checkOutDate");
@@ -66,19 +82,14 @@ function HotelPage() {
     // Can not select days before today
     return current && current < dayjs().startOf("day");
   };
-
   const data = [
     {
       value: 1,
-      label: "1 room, 2 guests",
+      label: "Single Bedded",
     },
     {
       value: 2,
-      label: "2 rooms, 4 guests",
-    },
-    {
-      value: 3,
-      label: "1 room, 1 guest",
+      label: "Double Bedded",
     },
   ];
 
@@ -109,6 +120,79 @@ function HotelPage() {
     },
   ];
 
+  useEffect(() => {
+    console.log("hotels: ", hotels);
+  }, [hotels]); // Logs only when `hotels` changes
+
+  // Get location from query params if available
+  useEffect(() => {
+    const locationFromQuery = query.get("location");
+    if (locationFromQuery) {
+      setLocation(locationFromQuery); // Set the location if it's in the URL
+    }
+  }, [query]);
+
+    // Calculate average price per night for each hotel and update min/max prices
+    useEffect(() => {
+      if (hotels.length > 0) {
+        const prices = hotels.map((hotel) => {
+          const averagePrice = hotel.rooms?.length
+            ? hotel.rooms.reduce((sum, room) => sum + (room.roomDetail.pricePerNight || 0), 0) / hotel.rooms.length
+            : 0;
+          return averagePrice;
+        });
+  
+        setMinPrice(Math.min(...prices));
+        setMaxPrice(Math.max(...prices));
+        setPriceRange([Math.min(...prices), Math.max(...prices)]);
+      }
+    }, [hotels]);
+
+  // Filter hotels based on location (hotelName) when location changes
+  useEffect(() => {
+    let filtered = hotels.map((hotel) => ({
+      ...hotel,
+      averagePricePerNight: hotel.rooms?.length
+        ? hotel.rooms.reduce((sum, room) => sum + (room.roomDetail.pricePerNight || 0), 0) / hotel.rooms.length
+        : 0,
+    }));
+
+    if (location) {
+      filtered = filtered.filter((hotel) =>
+        hotel.hotelName.toLowerCase().includes(location.toLowerCase())
+      );
+    }
+
+    if (selectedBedID) {
+      filtered = filtered.filter((hotel) =>
+        hotel.rooms.some((room) =>
+          room.bedRooms.some((bedRoom) => bedRoom.bedID === selectedBedID)
+        )
+      );
+    }
+
+    filtered = filtered.filter(
+      (hotel) =>
+        hotel.averagePricePerNight >= priceRange[0] &&
+        hotel.averagePricePerNight <= priceRange[1]
+    );
+
+    setFilteredHotels(filtered);
+  }, [location, hotels, selectedBedID, priceRange]);
+
+  const handleSliderChange = (value) => {
+    setPriceRange(value);
+  };
+
+
+  // Handle location input change
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value); // Update location state on input change
+  };
+  const handleRoomSelection = (value) => {
+    setSelectedBedID(value); // Update the selected bedID
+  };
+
   return (
     <div className="px-[150px] pb-[27px] mt-[160px]">
       {/*Search bar */}
@@ -120,6 +204,7 @@ function HotelPage() {
             prefix={<CarOutlined />}
             size="large"
             value={location}
+            onChange={handleLocationChange} // Trigger filter when input changes
           />
 
           <DatePicker
@@ -157,8 +242,9 @@ function HotelPage() {
             placeholder="Select Room"
             options={data}
             allowClear
-            value={room}
-            onChange={setRoom}
+            value={selectedBedID}
+            onChange={handleRoomSelection}
+
           />
         </div>
       </div>
@@ -183,18 +269,18 @@ function HotelPage() {
                   }
                 >
                   <div className="mb-6">
-                    <Slider
-                      range
-                      min={100}
-                      max={2000}
-                      defaultValue={priceRange}
-                      onChange={setPriceRange}
-                      className="mb-4"
-                    />
-                    <p className="flex justify-between">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
-                    </p>
+                  <Slider
+                    range
+                    min={minPrice}
+                    max={maxPrice}
+                    value={priceRange}
+                    onChange={handleSliderChange}
+                    className="mb-4"
+                  />
+                  <p className="flex justify-between">
+                    <span>${priceRange[0]}</span>
+                    <span>${priceRange[1]}</span>
+                  </p>
                   </div>
                 </Collapse.Panel>
 
@@ -271,7 +357,9 @@ function HotelPage() {
             <div className="flex flex-row justify-between mb-4 text-base">
               <span>
                 <span className="font-semibold text-black text-[18px]">
-                  Showing {Array.isArray(hotels) ? hotels.length : 0} of{" "}
+                  Showing{" "}
+                  {Array.isArray(filteredHotels) ? filteredHotels.length : 0}{" "}
+                  out of{" "}
                 </span>
                 <span className="text-[#FF8682] text-[18px]">
                   {" "}
@@ -308,9 +396,9 @@ function HotelPage() {
               ) : error ? (
                 <p>Error: {error}</p>
               ) : (
-                Array.isArray(hotels) &&
-                hotels.map((hotel) => (
-                  <HotelCard key={hotel.hotelID} hotel={hotel} />
+                Array.isArray(filteredHotels) &&
+                filteredHotels.map((hotel) => (
+                  <HotelCard key={hotel.hotelID} hotel={hotel}/>
                 ))
               )}
             </div>

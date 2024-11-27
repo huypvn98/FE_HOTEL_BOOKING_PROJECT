@@ -4,7 +4,7 @@ import { message } from "antd";
 
 const initialState = {
   data: null,
-  user: JSON.parse(localStorage.getItem("user")) || null,
+  user: localStorage.getItem("user") || null,
   loading: false,
   error: null,
   isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false, // Retrieve isAuthenticated from local storage// Add isAuthenticated to the initial state
