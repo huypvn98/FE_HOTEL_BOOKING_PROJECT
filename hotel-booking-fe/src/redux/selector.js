@@ -12,6 +12,9 @@ export const allRoom = (state) => state.roomSlice.allRoom;
 
 export const roomDetail = (state) => state.roomDetailSlice.roomDetail;
 
+export const roomById = (state) => state.roomSlice.roomById;
+
+
 export const bedDetail = (state) => state.bedSlice.bedDetail;
 
 export const userSlice = (state) => state.UserSlice.data;

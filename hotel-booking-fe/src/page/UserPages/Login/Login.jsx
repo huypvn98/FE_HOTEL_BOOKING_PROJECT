@@ -2,7 +2,7 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message } from "antd";
 import React, { useState } from "react";
 import "./Login.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../redux/slices/authSlice";
 
@@ -12,7 +12,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const loading = useSelector((state) => state.authSlice?.loading);
-  //const error = useSelector((state) => state.auth.error);
+  const location = useLocation();
+  const cart = JSON.parse(localStorage.getItem("cart"))
+
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
@@ -22,6 +24,7 @@ const Login = () => {
   };
 
   const handleLogin = () => {
+
     dispatch(login({ username, password }))
       .then((res) => {
         console.log(res);
@@ -30,7 +33,15 @@ const Login = () => {
           if (res.payload?.data?.userInfo.roles === "Admin") {
             navigate("admin");
           } else if (res.payload?.data?.userInfo.roles === "Customer") {
-            navigate("/");
+            if(cart === undefined || cart === null || cart === "" ){
+            console.log("logged")  
+            console.log(cart)
+            // navigate("/");
+            
+            }else{
+              navigate(`/bookingcart/${cart?.id}`)
+            }
+            
           } else {
             message.error("Wrong username or password");
           }

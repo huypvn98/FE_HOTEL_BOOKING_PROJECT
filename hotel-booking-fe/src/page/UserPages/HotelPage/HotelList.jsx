@@ -3,8 +3,11 @@ import { EnvironmentOutlined, HeartOutlined } from "@ant-design/icons";
 import { Divider, } from "antd";
 import { Link } from "react-router-dom";
 
-function HotelCard({ hotel }) {
+function HotelCard({ hotel, }) {
   const baseURL = "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
+  const averagePricePerNight = hotel.rooms && hotel.rooms.length > 0
+    ? (hotel.rooms.reduce((sum, room) => sum + (room.roomDetail.pricePerNight || 0), 0) / hotel.rooms.length).toFixed(2)
+    : 0;
   return (
     <div className="bg-white rounded-lg shadow-md flex space-x-6">
       {/* Hotel Image */}
@@ -47,7 +50,7 @@ function HotelCard({ hotel }) {
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold text-[#a9b489]">$240/night</span>
+            <span className="text-xl font-bold text-[#a9b489]">${averagePricePerNight}/night</span>
             <span className="text-gray-500 text-base flex justify-end ">
               {" "}
               excl. tax
