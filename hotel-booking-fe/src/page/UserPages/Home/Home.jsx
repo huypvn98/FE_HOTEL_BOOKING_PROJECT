@@ -261,8 +261,8 @@ function Home() {
                   const formattedPrice = new Intl.NumberFormat('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
-                    minimumFractionDigits: 3,
-                  }).format(hotelRoom?.roomDetail?.pricePerNight);
+                    minimumFractionDigits: 0,
+                  }).format(hotelRoom?.roomDetail?.pricePerNight * 100);
                   return (
                     <Link
                       to={`/hotel/detail/${hotel.hotelID}`}
