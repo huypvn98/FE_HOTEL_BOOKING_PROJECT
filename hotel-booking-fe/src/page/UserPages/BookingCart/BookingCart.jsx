@@ -19,7 +19,10 @@ import Building from "../../../image/building.png";
 import HotelImage from "../../../image/Frame 186.png";
 import { CheckCircleOutlined, MailOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-import { createPaymentUrl, fetchBooking } from "../../../redux/slices/bookingSlice";
+import {
+  createPaymentUrl,
+  fetchBooking,
+} from "../../../redux/slices/bookingSlice";
 import moment from "moment";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router";
@@ -39,7 +42,8 @@ const BookingCart = () => {
 
   const hotel = useSelector(hotelDetail);
   // const role = user?.roles;
-  const role = localStorage.getItem("role")
+  const users = JSON.parse(localStorage.getItem("user"));
+  const role = users?.roles;
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.BookingSlice?.loading);
   const navigate = useNavigate();
@@ -97,7 +101,7 @@ const BookingCart = () => {
   const handleProceed = () => {
     const currentDate = new Date();
     const bookingDate = currentDate.toISOString().split("T")[0];
-    const total = room?.roomDetail?.pricePerNight * nights
+    const total = room?.roomDetail?.pricePerNight * nights;
     const bookingPayload = {
       roomID: 7,
       userID: user.userID,
@@ -111,34 +115,34 @@ const BookingCart = () => {
       toDate: bookingDate,
       note: "da thanh toan truoc",
     };
-    const paymentPayload ={
+    const paymentPayload = {
       amount: total * 100,
       transactionId: generateRandomId(),
       orderDescription: `Payment`,
-      orderType:"service",
+      orderType: "service",
       // returnUrl: `${window.location.origin}/payment-response`
-    }
-    console.log("paymentPayload", paymentPayload)
+    };
+    console.log("paymentPayload", paymentPayload);
     dispatch(fetchBooking(bookingPayload));
-    dispatch(createPaymentUrl(paymentPayload))
-    setIsModalOpen(true)
-
+    dispatch(createPaymentUrl(paymentPayload));
+    setIsModalOpen(true);
   };
-  
-  useEffect(()=>{
-  if(isModalOpen === true){
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setIsPaymentSuccessful(true)
-    }, 3000);
-    if(isPaymentSuccessful===true){
-      setTimeout(()=>{setIsPaymentSuccessful(false)},2000)
-    }
-  }
 
-  },[])
+  useEffect(() => {
+    if (isModalOpen === true) {
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsPaymentSuccessful(true);
+      }, 3000);
+      if (isPaymentSuccessful === true) {
+        setTimeout(() => {
+          setIsPaymentSuccessful(false);
+        }, 2000);
+      }
+    }
+  }, []);
   const handleModalClose = () => {
-    setIsModalOpen(false); 
+    setIsModalOpen(false);
   };
 
   const formattedCheckInDate = checkInDate
@@ -154,22 +158,24 @@ const BookingCart = () => {
 
   console.log(room);
 
-  const handleNavigating = () =>{
+  const handleNavigating = () => {
     const cart = {
       checkInDate,
       checkOutDate,
-      id
-    }
-    localStorage.setItem("cart", JSON.stringify(cart))
+      id,
+    };
+    localStorage.setItem("cart", JSON.stringify(cart));
     navigate("/login");
-    
-  }
+  };
 
   function generateRandomId(length = 10) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let randomId = '';
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let randomId = "";
     for (let i = 0; i < length; i++) {
-      randomId += characters.charAt(Math.floor(Math.random() * characters.length));
+      randomId += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
     return randomId;
   }
@@ -187,7 +193,7 @@ const BookingCart = () => {
                   : "Double Bed"} */}
               </Title>
               <Text className="text-[#a9b489] font-extrabold text-[32px]">
-              {room?.roomDetail?.pricePerNight * 1000} VND{" "}
+                {room?.roomDetail?.pricePerNight * 1000} VND{" "}
                 <span className="text-[14px]">/night</span>
               </Text>
             </Row>
@@ -371,7 +377,9 @@ const BookingCart = () => {
             <Divider></Divider>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Total</Text>
-              <Text strong>{room?.roomDetail?.pricePerNight * 1000 * nights} VND</Text>
+              <Text strong>
+                {room?.roomDetail?.pricePerNight * 1000 * nights} VND
+              </Text>
             </Row>
           </Card>
         </Col>
@@ -386,33 +394,36 @@ const BookingCart = () => {
           </Button>,
         ]}
       >
-      <Row justify={"center"}>
-        <QRCode
-          value={qrUrl}
-          size={200}
-        />
+        <Row justify={"center"}>
+          <QRCode value={qrUrl} size={200} />
         </Row>
       </Modal>
       <Modal
-      visible={isPaymentSuccessful}
-      onCancel={()=>{setIsPaymentSuccessful(false)}}
-      footer={null}
-      centered
-    >
-      <Row justify="center" align="middle">
-        <Col>
-          <CheckCircleOutlined
-            style={{ fontSize: "60px", color: "#52c41a", marginBottom: "20px" }}
-          />
-        </Col>
-      </Row>
-      <Row justify="center" align="middle">
-        <Col>
-          <Title level={3}>Payment Successful</Title>
-          <Text>Your transaction has been completed successfully.</Text>
-        </Col>
-      </Row>
-    </Modal>
+        visible={isPaymentSuccessful}
+        onCancel={() => {
+          setIsPaymentSuccessful(false);
+        }}
+        footer={null}
+        centered
+      >
+        <Row justify="center" align="middle">
+          <Col>
+            <CheckCircleOutlined
+              style={{
+                fontSize: "60px",
+                color: "#52c41a",
+                marginBottom: "20px",
+              }}
+            />
+          </Col>
+        </Row>
+        <Row justify="center" align="middle">
+          <Col>
+            <Title level={3}>Payment Successful</Title>
+            <Text>Your transaction has been completed successfully.</Text>
+          </Col>
+        </Row>
+      </Modal>
     </div>
   );
 };
