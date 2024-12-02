@@ -193,7 +193,11 @@ const BookingCart = () => {
                   : "Double Bed"} */}
               </Title>
               <Text className="text-[#a9b489] font-extrabold text-[32px]">
-                {room?.roomDetail?.pricePerNight * 1000} VND{" "}
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                  minimumFractionDigits: 0,
+                }).format(room?.roomDetail?.pricePerNight * 100)}
                 <span className="text-[14px]">/night</span>
               </Text>
             </Row>
@@ -356,7 +360,11 @@ const BookingCart = () => {
             <Text strong>Price Details</Text>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Base Fare</Text>
-              <Text strong>{room?.roomDetail?.pricePerNight * 1000} VND</Text>
+              <Text strong>{new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                  minimumFractionDigits: 0,
+                }).format(room?.roomDetail?.pricePerNight * 100)}</Text>
             </Row>
             <Row className="mt-4" justify={"space-between"}>
               <Text>Nights</Text>
@@ -378,7 +386,11 @@ const BookingCart = () => {
             <Row className="mt-4" justify={"space-between"}>
               <Text>Total</Text>
               <Text strong>
-                {room?.roomDetail?.pricePerNight * 1000 * nights} VND
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                  minimumFractionDigits: 0,
+                }).format(room?.roomDetail?.pricePerNight * 100)}
               </Text>
             </Row>
           </Card>
