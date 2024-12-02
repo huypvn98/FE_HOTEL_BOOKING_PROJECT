@@ -23,10 +23,33 @@ import {
 } from "../../../redux/slices/roomSlice";
 import { fetchAllRoomDetail } from "../../../redux/slices/roomDetailSlice";
 import { fetchAllBedDetail } from "../../../redux/slices/bedSlice";
-import { reviews } from "../../../utils/detailReviewData";
+import reviews from "../../../utils/reviewData.json";
 
 const HotelDetail = () => {
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+  const totalReviews = reviews.length;
+  const averageRating =
+    reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
+
+  const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * reviewsPerPage;
+  const currentReviews = reviews.slice(startIndex, startIndex + reviewsPerPage);
+
   const baseURL =
     "https://hotelbooking-a6b9ecdjbza2h5ft.canadacentral-01.azurewebsites.net";
 
@@ -87,8 +110,6 @@ const HotelDetail = () => {
     ],
   ];
 
- 
-
   const StarIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -123,12 +144,23 @@ const HotelDetail = () => {
     setTimeout(() => setCurrentImage(""), 300); // Delay clearing image for smooth close animation
   };
 
+  console.log("hotel", hotel);
 
-  console.log("hotel", hotel)
-
-  const averagePricePerNight = hotel?.rooms && hotel?.rooms.length > 0
-    ? (hotel?.rooms.reduce((sum, room) => sum + (room?.roomDetail?.pricePerNight || 0), 0) / hotel?.rooms.length).toFixed(2)
-    : 0;  
+  const averagePricePerNight =
+    hotel?.rooms && hotel?.rooms.length > 0
+      ? new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+          minimumFractionDigits: 0,
+        }).format(
+          (hotel.rooms.reduce(
+            (sum, room) => sum + (room?.roomDetail?.pricePerNight || 0),
+            0
+          ) /
+            hotel.rooms.length) *
+            100
+        )
+      : "0 VND";
   useEffect(() => {
     dispatch(fetchAllRoom());
     dispatch(fetchHotelDetail(id));
@@ -180,7 +212,10 @@ const HotelDetail = () => {
           style={{ flexDirection: "column" }}
           className="flex items-center gap-2"
         >
-          <div className="text-2xl font-bold"> ~${averagePricePerNight}/night</div>
+          <div className="text-2xl font-bold">
+            {" "}
+            {averagePricePerNight}/night
+          </div>
           {/* Icon Buttons */}
           <div className="flex items-center gap-2">
             <Button
@@ -404,8 +439,8 @@ const HotelDetail = () => {
               const formattedPrice = new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-                minimumFractionDigits: 3,
-              }).format(room.roomDetail?.pricePerNight);
+                minimumFractionDigits: 0,
+              }).format(room.roomDetail?.pricePerNight * 100);
 
               return (
                 <div
@@ -414,12 +449,12 @@ const HotelDetail = () => {
                 >
                   {/* Room Details */}
                   <div>
-                  <h3 style={{ fontWeight: "bold" }}>
-                    {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
-                  </h3>
-                  <p>{room.roomDetail?.roomFittings}</p>
-                  <p>Room number: {room.roomNumber}</p>
-                </div>
+                    <h3 style={{ fontWeight: "bold" }}>
+                      {room.roomDetail?.roomType} - {room.roomDetail?.roomView}
+                    </h3>
+                    <p>{room.roomDetail?.roomFittings}</p>
+                    <p>Room number: {room.roomNumber}</p>
+                  </div>
 
                   {/* Bed Type */}
                   <p>
@@ -481,43 +516,17 @@ const HotelDetail = () => {
       </div> */}
 
       {/* Detailed Amenities Section */}
-      <div className="bg-white rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-bold p-6 border-b">Amenities</h2>
-        <div className="p-6">
-          <div className="grid grid-cols-2 gap-x-8">
-            <div className="space-y-4">
-              {detailedAmenities[0].map((amenity, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <span className="text-xl">{amenity.icon}</span>
-                  <span className="text-gray-700">{amenity.name}</span>
-                </div>
-              ))}
-            </div>
-            <div className="space-y-4">
-              {detailedAmenities[1].map((amenity, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <span className="text-xl">{amenity.icon}</span>
-                  <span className="text-gray-700">{amenity.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="mt-4 text-blue-500 hover:text-blue-600 cursor-pointer">
-            +24 more
-          </div>
-        </div>
-      </div>
-
-      {/* Reviews Section */}
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-6 flex justify-between items-center border-b">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <span className="text-4xl font-bold">4.2</span>
+              <span className="text-4xl font-bold">
+                {averageRating.toFixed(1)}
+              </span>
               <div>
                 <div className="font-semibold text-lg">Very good</div>
                 <div className="text-gray-500 text-sm">
-                  371 verified reviews
+                  {totalReviews} verified reviews
                 </div>
               </div>
             </div>
@@ -530,26 +539,24 @@ const HotelDetail = () => {
         </div>
 
         <div className="divide-y">
-          {reviews.map((review, idx) => (
+          {currentReviews.map((review, idx) => (
             <div key={idx} className="p-6">
               <div className="flex items-start gap-4">
                 <img
                   src={review.avatar}
-                  alt={review.author}
+                  alt={review.userName}
                   className="w-10 h-10 rounded-full"
                 />
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold">
-                        {review.rating} {review.title}
-                      </span>
+                      <span className="font-bold">{review.userName}</span>
                       <span className="text-gray-500">|</span>
-                      <span>{review.author}</span>
+                      <span className="text-yellow-500">{review.rating} ★</span>
                     </div>
                     <button className="text-gray-500">🏴</button>
                   </div>
-                  <p className="mt-2 text-gray-700">{review.content}</p>
+                  <p className="mt-2 text-gray-700">{review.comment}</p>
                 </div>
               </div>
             </div>
@@ -557,9 +564,23 @@ const HotelDetail = () => {
         </div>
 
         <div className="p-6 border-t flex items-center justify-center gap-4">
-          <button className="text-gray-500 hover:text-gray-700">←</button>
-          <span>1 of 40</span>
-          <button className="text-gray-500 hover:text-gray-700">→</button>
+          <button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+          >
+            ←
+          </button>
+          <span>
+            {currentPage} of {totalPages}
+          </span>
+          <button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            →
+          </button>
         </div>
       </div>
     </div>
